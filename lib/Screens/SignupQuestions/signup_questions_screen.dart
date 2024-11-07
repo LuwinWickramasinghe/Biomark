@@ -1,19 +1,20 @@
+import 'package:biomark/Screens/SignupQuestions/components/signup_question_form.dart';
 import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 import 'package:biomark/responsive.dart';
 import '../../components/background.dart';
 import 'components/sign_up_top_image.dart';
-import '../SignupQuestions/signup_questions_screen.dart';
 
-class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+
+class SignUpQuestionScreen extends StatelessWidget {
+  const SignUpQuestionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return const Background(
       child: SingleChildScrollView(
         child: Responsive(
-          mobile: MobileSignupScreen(),
+          mobile: MobileSignupQuestionScreen(),
           desktop: Row(
             children: [
               Expanded(
@@ -25,7 +26,7 @@ class SignUpScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 450,
-                      child: SignUpQuestionScreen(),
+                      child: SignUpQuestionForm(),
                     ),
                     SizedBox(height: defaultPadding / 2),
                     // SocalSignUp()
@@ -40,8 +41,8 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-class MobileSignupScreen extends StatelessWidget {
-  const MobileSignupScreen({
+class MobileSignupQuestionScreen extends StatelessWidget {
+  const MobileSignupQuestionScreen({
     Key? key,
   }) : super(key: key);
 
@@ -50,13 +51,12 @@ class MobileSignupScreen extends StatelessWidget {
     return const Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        SignUpScreenTopImage(),
         Row(
           children: [
             Spacer(),
             Expanded(
               flex: 8,
-              child: MobileSignupQuestionScreen(),
+              child: SignUpQuestionForm(),
             ),
             Spacer(),
           ],
