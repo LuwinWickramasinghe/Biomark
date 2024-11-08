@@ -25,8 +25,21 @@ class LoginAndSignupBtn extends StatelessWidget {
               ),
             );
           },
+          style: ElevatedButton.styleFrom(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ), backgroundColor: kPrimaryColor, // Main button color
+            elevation: 15, // Shadow to make it 3D
+            shadowColor: Colors.black.withOpacity(0.3), // Custom shadow color
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
+          ),
           child: Text(
             "Login".toUpperCase(),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              fontFamily: 'Montserrat'
+            ),
           ),
         ),
         const SizedBox(height: 16),
@@ -42,12 +55,21 @@ class LoginAndSignupBtn extends StatelessWidget {
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryLightColor,
-            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ), backgroundColor: kPrimaryLightColor,
+            elevation: 10, // Shadow to make it 3D
+            shadowColor: Colors.black.withOpacity(0.3), // Custom shadow color
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
           ),
           child: Text(
             "Sign Up".toUpperCase(),
-            style: const TextStyle(color: Colors.black),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+              fontFamily: 'Montserrat'
+            ),
           ),
         ),
         const SizedBox(height: 16),
