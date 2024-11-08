@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../EditProfile/edit_profile.dart';
+import '../AccountRecovery/account_recovery.dart';
 
 
 
@@ -95,11 +96,17 @@ class MenuScreen extends StatelessWidget {
           ),
                   const SizedBox(height: 10),
                   ElevatedButton(
-                    onPressed: () {
-                      // Navigate to Account Recovery
-                    },
-                    child: const Text('Account Recovery'),
-                  ),
+            onPressed: () {
+              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AccountRecoveryScreen(),
+                ),
+              );
+            },
+            child: Text("Account Recovery".toUpperCase()),
+          ),
                 ],
               ),
             ),
