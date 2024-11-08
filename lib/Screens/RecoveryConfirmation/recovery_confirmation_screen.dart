@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:biomark/Screens/Login/login_screen.dart';
+import '../RecoveryConfirmation/recovery_successful.dart';
+import '../RecoveryConfirmation/recovery_unsuccessful.dart';
 import 'package:biomark/constants.dart';
 
 class PasswordResetScreen extends StatefulWidget {
@@ -13,6 +14,31 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
+
+  bool _isSuccessful = false; // State variable to indicate success or failure
+
+  void _resetPassword() {
+    if (_formKey.currentState!.validate()) {
+      // Example logic for password reset success or failure
+      setState(() {
+        // Simulate a success or failure based on some condition
+        _isSuccessful = _passwordController.text == "newpassword"; // Example check
+      });
+
+      // Navigate based on the state
+      if (_isSuccessful) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const RecoverySuccessfulScreen()),
+        );
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const RecoveryUnsuccessfulScreen()),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,16 +101,7 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
               // Confirm Reset Button
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Handle password reset confirmation here
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                        (route) => false,
-                      );
-                    }
-                  },
+                  onPressed: _resetPassword,
                   child: const Text("Confirm Reset"),
                 ),
               ),
