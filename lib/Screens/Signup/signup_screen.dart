@@ -3,7 +3,6 @@ import 'package:biomark/constants.dart';
 import 'package:biomark/responsive.dart';
 import '../../components/background.dart';
 import 'components/sign_up_top_image.dart';
-import '../SignupQuestions/signup_questions_screen.dart';
 import 'components/signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
