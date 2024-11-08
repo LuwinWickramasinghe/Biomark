@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../EditProfile/edit_profile.dart';
+
 
 
 class MenuScreen extends StatelessWidget {
@@ -80,11 +82,17 @@ class MenuScreen extends StatelessWidget {
               child: Column(
                 children: [
                   ElevatedButton(
-                    onPressed: () {
-                      // Navigate to Edit Profile
-                    },
-                    child: const Text('Edit Profile'),
-                  ),
+            onPressed: () {
+              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const EditProfileScreen(),
+                ),
+              );
+            },
+            child: Text("Edit Profile".toUpperCase()),
+          ),
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
