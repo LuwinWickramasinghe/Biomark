@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
 import '../../Login/login_screen.dart';
+import '../../SignupQuestions/signup_questions_screen.dart';
 
 class SignUpForm extends StatelessWidget {
   const SignUpForm({
@@ -59,8 +60,16 @@ class SignUpForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: defaultPadding / 2),
-          ElevatedButton(
-            onPressed: () {},
+         ElevatedButton(
+            onPressed: () {
+              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SignUpQuestionScreen(),
+                ),
+              );
+            },
             child: Text("Sign Up".toUpperCase()),
           ),
           const SizedBox(height: defaultPadding),

@@ -4,6 +4,7 @@ import 'package:biomark/responsive.dart';
 import '../../components/background.dart';
 import 'components/sign_up_top_image.dart';
 import '../SignupQuestions/signup_questions_screen.dart';
+import 'components/signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -25,7 +26,7 @@ class SignUpScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 450,
-                      child: SignUpQuestionScreen(),
+                      child: SignUpForm(),
                     ),
                     SizedBox(height: defaultPadding / 2),
                     // SocalSignUp()
@@ -56,7 +57,7 @@ class MobileSignupScreen extends StatelessWidget {
             Spacer(),
             Expanded(
               flex: 8,
-              child: MobileSignupQuestionScreen(),
+              child: SignUpForm(),
             ),
             Spacer(),
           ],
