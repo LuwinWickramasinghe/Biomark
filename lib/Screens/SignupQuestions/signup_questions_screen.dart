@@ -7,7 +7,7 @@ import 'components/sign_up_top_image.dart';
 
 
 class SignUpQuestionScreen extends StatelessWidget {
-  const SignUpQuestionScreen({Key? key}) : super(key: key);
+  const SignUpQuestionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +43,8 @@ class SignUpQuestionScreen extends StatelessWidget {
 
 class MobileSignupQuestionScreen extends StatelessWidget {
   const MobileSignupQuestionScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -6,8 +6,8 @@ import '../../Login/login_screen.dart';
 
 class MenuOptions extends StatelessWidget {
   const MenuOptions({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
     @override
   Widget build(BuildContext context) {

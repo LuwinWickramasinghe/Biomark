@@ -6,8 +6,8 @@ import '../../Login/login_screen.dart';
 
 class SignUpQuestionForm extends StatelessWidget {
   const SignUpQuestionForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
