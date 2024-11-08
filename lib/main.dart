@@ -1,8 +1,30 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:biomark/Screens/Welcome/welcome_screen.dart';
 import 'package:biomark/constants.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(const MyApp());
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  if(kIsWeb){
+      await Firebase.initializeApp(
+        options: const FirebaseOptions(
+          apiKey: "AIzaSyAqRlUlkdhlGBhhdIpD5OprYGusukqjmBM",
+          authDomain: "biomark-86cde.firebaseapp.com",
+          projectId: "biomark-86cde",
+          storageBucket: "biomark-86cde.firebasestorage.app",
+          messagingSenderId: "646088274735",
+          appId: "1:646088274735:web:f4b3caf91a5e089931e7da")
+    );
+  }else{
+    await Firebase.initializeApp();
+  }
+
+  runApp(const MyApp());
+
+} 
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
