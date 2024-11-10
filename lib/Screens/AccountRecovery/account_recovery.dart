@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:biomark/constants.dart';
+import 'package:provider/provider.dart';
+import 'package:biomark/viewmodels/account_recovery_view_model.dart';
 import '../RecoveryConfirmation/recovery_confirmation_screen.dart';
 
 class AccountRecoveryScreen extends StatelessWidget {
-  const AccountRecoveryScreen({Key? key}) : super(key: key);
+  const AccountRecoveryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<AccountRecoveryViewModel>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Account Recovery"),
@@ -25,66 +28,89 @@ class AccountRecoveryScreen extends StatelessWidget {
 
               // Full Name Field
               TextFormField(
+                controller: viewModel.nameController,
                 decoration: const InputDecoration(
                   labelText: "Full Name",
                   prefixIcon: Icon(Icons.person),
                 ),
+                onChanged: (_) => viewModel.updateFormValidity(),
               ),
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: 20),
 
-              // Date of Birth Field
+              // Date of Birth Field with Date Picker
               TextFormField(
+                controller: viewModel.dobController,
                 decoration: const InputDecoration(
                   labelText: "Date of Birth",
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
-                onTap: () {
-                  // Optional: Open date picker
+                readOnly: true,  // Make the field read-only so the user taps it
+                onTap: () async {
+                  // Show date picker dialog
+                  final DateTime? selectedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+                  if (selectedDate != null) {
+                    // Format the selected date and update the controller
+                    viewModel.dobController.text = "${selectedDate.toLocal()}".split(' ')[0];
+                    viewModel.updateFormValidity(); // Update form validity after selecting date
+                  }
                 },
+                onChanged: (_) => viewModel.updateFormValidity(),
               ),
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: 20),
 
-              // Security Question 1: Mother's Maiden Name
+              // First Security Question
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Mother's Maiden Name",
-                  prefixIcon: Icon(Icons.security),
+                controller: viewModel.questionControllers[0],
+                decoration: InputDecoration(
+                  labelText: viewModel.getQuestionLabel(0),
+                  prefixIcon: Icon(viewModel.getQuestionIcon(0)),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () => viewModel.replaceQuestion(0),
+                  ),
                 ),
+                onChanged: (_) => viewModel.updateFormValidity(),
               ),
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: 20),
 
-              // Security Question 2: Childhood Best Friend's Name
+              // Second Security Question
               TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Childhood Best Friend's Name",
-                  prefixIcon: Icon(Icons.people),
+                controller: viewModel.questionControllers[1],
+                decoration: InputDecoration(
+                  labelText: viewModel.getQuestionLabel(1),
+                  prefixIcon: Icon(viewModel.getQuestionIcon(1)),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () => viewModel.replaceQuestion(1),
+                  ),
                 ),
+                onChanged: (_) => viewModel.updateFormValidity(),
               ),
-              const SizedBox(height: defaultPadding),
+              const SizedBox(height: 20),
 
-              // Security Question 3: Childhood Pet's Name
-              TextFormField(
-                decoration: const InputDecoration(
-                  labelText: "Childhood Pet's Name",
-                  prefixIcon: Icon(Icons.pets),
-                ),
-              ),
-              const SizedBox(height: defaultPadding),
-
-              // Recover Account Button
+              // Next Button
               Center(
                 child: ElevatedButton(
-            onPressed: () {
-              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PasswordResetScreen(),
+                  onPressed: viewModel.isFormValid
+                      ? () async {
+                          await viewModel.verifyAndProceed();
+                          if (viewModel.isVerified) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PasswordResetScreen(),
+                              ),
+                            );
+                          }
+                        }
+                      : null,
+                  child: const Text("NEXT"),
                 ),
-              );
-            },
-            child: Text("Edit Profile".toUpperCase()),
-          ),
               ),
             ],
           ),
