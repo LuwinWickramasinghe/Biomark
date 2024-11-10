@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../components/already_have_an_account_acheck.dart';
 import '../../../constants.dart';
 import '../../Signup/signup_screen.dart';
+import 'package:biomark/Screens/AccountRecovery/account_recovery.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -34,16 +35,11 @@ class _LoginFormState extends State<LoginForm> {
       });
 
       if (userLogged) {
-        // Successful login
-        // ScaffoldMessenger.of(context).showSnackBar(
-        //   const SnackBar(content: Text('Login successful!')),
-        // );
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MenuScreen()),
         );
       } else {
-        // Failed login
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Invalid email or password')),
         );
@@ -102,23 +98,38 @@ class _LoginFormState extends State<LoginForm> {
           _isLoading
               ? const CircularProgressIndicator()
               : ElevatedButton(
-            onPressed: _submitLogin,
-            child: Text(
-              "Login".toUpperCase(),
-            ),
-          ),
+                  onPressed: _submitLogin,
+                  child: Text(
+                    "Login".toUpperCase(),
+                  ),
+                ),
           const SizedBox(height: defaultPadding),
           AlreadyHaveAnAccountCheck(
             press: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    return const SignUpScreen();
-                  },
+                  builder: (context) => const SignUpScreen(),
                 ),
               );
             },
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const AccountRecoveryScreen(),
+                ),
+              );
+            },
+            child: const Text(
+              "Recover Account",
+              style: TextStyle(
+                color: kPrimaryColor,
+                decoration: TextDecoration.underline,
+              ),
+            ),
           ),
         ],
       ),
