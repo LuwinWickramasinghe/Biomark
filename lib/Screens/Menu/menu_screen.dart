@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-
 import '../EditProfile/edit_profile.dart';
 import '../AccountRecovery/account_recovery.dart';
 
-
-
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
+
+  @override
+  _MenuScreenState createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  bool isSubscribed = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,8 @@ class MenuScreen extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage('assets/user_avatar.png'), // Placeholder avatar
+                    backgroundImage:
+                        AssetImage('assets/user_avatar.png'), // Placeholder avatar
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -48,34 +54,40 @@ class MenuScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Personal Info Section
-            const Text(
-              'Personal Information',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const Divider(),
-            const ListTile(
-              leading: Icon(Icons.calendar_today),
-              title: Text('Date of Birth'),
-              subtitle: Text('[User Date of Birth]'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.location_on),
-              title: Text('Location of Birth'),
-              subtitle: Text('[User Location]'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.bloodtype),
-              title: Text('Blood Group'),
-              subtitle: Text('[User Blood Group]'),
-            ),
-            const ListTile(
-              leading: Icon(Icons.height),
-              title: Text('Height'),
-              subtitle: Text('[User Height]'),
-            ),
-            // Add more fields as necessary...
-
+            // Display personal information only if subscribed
+            if (isSubscribed)
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Personal Information',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(Icons.calendar_today),
+                    title: Text('Date of Birth'),
+                    subtitle: Text('[User Date of Birth]'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.location_on),
+                    title: Text('Location of Birth'),
+                    subtitle: Text('[User Location]'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.bloodtype),
+                    title: Text('Blood Group'),
+                    subtitle: Text('[User Blood Group]'),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.height),
+                    title: Text('Height'),
+                    subtitle: Text('[User Height]'),
+                  ),
+                  // Add more fields as necessary...
+                ],
+              ),
+            
             const SizedBox(height: 20),
 
             // Action Section
@@ -83,30 +95,29 @@ class MenuScreen extends StatelessWidget {
               child: Column(
                 children: [
                   ElevatedButton(
-            onPressed: () {
-              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const EditProfileScreen(),
-                ),
-              );
-            },
-            child: Text("Edit Profile".toUpperCase()),
-          ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AccountRecoveryScreen(),
+                          ),
+                        );
+                      },
+                      child: Text("Account Recovery".toUpperCase()),
+                    ),
                   const SizedBox(height: 10),
-                  ElevatedButton(
-            onPressed: () {
-              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AccountRecoveryScreen(),
-                ),
-              );
-            },
-            child: Text("Account Recovery".toUpperCase()),
-          ),
+                  if (isSubscribed)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditProfileScreen(),
+                          ),
+                        );
+                      },
+                      child: Text("Edit Profile".toUpperCase()),
+                    ),
                 ],
               ),
             ),
