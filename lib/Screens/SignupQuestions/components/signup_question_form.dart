@@ -49,7 +49,7 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
     if (_formKey.currentState?.validate() ?? false) {
       final hashedPassword = hashData(widget.password);
       final encryptedName = encryptData(widget.name);
-      final encryptedEmail = encryptData(widget.email);
+      final email = widget.email;
 
       // Hash the answers to the security questions
       final hashedMotherMaidenName = hashData(_motherMaidenNameController.text);
@@ -61,7 +61,7 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
         // Save the data to Firebase
         await FirebaseFirestore.instance.collection('users').add({
           'name': encryptedName,
-          'email': encryptedEmail,
+          'email': email,
           'password': hashedPassword,
           'motherMaidenName': hashedMotherMaidenName,
           'bestFriendsName': hashedBestFriendsName,
