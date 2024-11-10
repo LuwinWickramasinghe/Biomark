@@ -26,7 +26,7 @@ class SignUpQuestionScreen extends StatelessWidget {
           mobile: MobileSignupQuestionScreen(name: name, email: email, password: password),
           desktop: Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: SignUpScreenTopImage(),
               ),
               Expanded(
