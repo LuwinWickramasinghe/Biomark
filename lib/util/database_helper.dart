@@ -34,47 +34,46 @@ class DatabaseHelper {
   }
 
   Future<void> cacheUser(Map<String, dynamic>? userData) async {
-    try {
+  try {
+    if (userData != null) {
+      // User data found, now insert it into SQLite
+      final db = await database;
 
-      if (userData != null) {
-        // User data found, now insert it into SQLite
-        final db = await database;
+      // Check if the user already exists in the local database
+      List<Map<String, dynamic>> existingUser = await db.query(
+        'users',
+        where: 'email = ?',
+        whereArgs: [userData['email']],
+      );
 
-        // Check if the user already exists in the local database
-        List<Map<String, dynamic>> existingUser = await db.query(
+      if (existingUser.isEmpty) {
+        // If user doesn't exist, insert the new user data
+        await db.insert(
           'users',
-          where: 'email = ?',
-          whereArgs: [userData['email']],
+          {
+            'email': userData['email'], // Ensure email is a string
+            'password': userData['password'], // Assuming password is hashed in Firebase
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts
         );
-
-        if (existingUser.isEmpty) {
-          // If user doesn't exist, insert the new user data
-          await db.insert(
-            'users',
-            {
-              'email': [userData['email']],
-              'password': userData['password'], // Assuming password is hashed in Firebase
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace, // Handle conflicts
-          );
-        } else {
-          // Optionally update the user record if needed (e.g., if password changes)
-          await db.update(
-            'users',
-            {
-              'password': userData['password'],
-            },
-            where: 'email = ?',
-            whereArgs: userData['email'],
-          );
-        }
       } else {
-        print("User not found in Firebase.");
+        // Optionally update the user record if needed (e.g., if password changes)
+        await db.update(
+          'users',
+          {
+            'password': userData['password'],
+          },
+          where: 'email = ?',
+          whereArgs: [userData['email']], // Ensure email is passed as a list for whereArgs
+        );
       }
-    } catch (e) {
-      print("Error caching user: $e");
+    } else {
+      print("User not found in Firebase.");
     }
+  } catch (e) {
+    print("Error caching user: $e");
   }
+}
 
   // Method to validate user credentials
   Future<Map<String, dynamic>?> getUserByEmail(String email) async {
