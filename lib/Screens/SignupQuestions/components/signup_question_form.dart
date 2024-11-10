@@ -1,24 +1,110 @@
+
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:bcrypt/bcrypt.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../../components/already_have_an_account_acheck.dart';
-import '../../../constants.dart';
 import '../../Login/login_screen.dart';
+import '../../../constants.dart';
+import '../../../components/already_have_an_account_acheck.dart';
 
-class SignUpQuestionForm extends StatelessWidget {
+class SignUpQuestionForm extends StatefulWidget {
+  final String name;
+  final String email;
+  final String password;
+
   const SignUpQuestionForm({
     super.key,
+    required this.name,
+    required this.email,
+    required this.password,
   });
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _SignUpQuestionFormState createState() => _SignUpQuestionFormState();
+}
+
+class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _motherMaidenNameController = TextEditingController();
+  final _bestFriendsNameController = TextEditingController();
+  final _childhoodPetsNameController = TextEditingController();
+  final _customQuestionController = TextEditingController();
+
+  // Encrypt method for sensitive data (Name & Email)
+String encryptData(String data) {
+  final key = encrypt.Key.fromUtf8('16charSecretKey!'); // Exactly 16 characters for AES-128
+  final iv = encrypt.IV.fromLength(16); // Initialization vector (IV) should also be 16 bytes
+  final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc)); // Specify AES mode if needed
+  final encrypted = encrypter.encrypt(data, iv: iv);
+  return encrypted.base64;
+}
+
+
+  // Hash method for password
+  String hashPassword(String password) {
+    return BCrypt.hashpw(password, BCrypt.gensalt());
+  }
+
+  // Submit the form and save data to Firebase
+  Future<void> submitForm() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      final hashedPassword = hashPassword(widget.password);
+      final encryptedName = encryptData(widget.name);
+      final encryptedEmail = encryptData(widget.email);
+
+      // Get the answers to the security questions
+      final motherMaidenName = _motherMaidenNameController.text;
+      final bestFriendsName = _bestFriendsNameController.text;
+      final childhoodPetsName = _childhoodPetsNameController.text;
+      final customQuestion = _customQuestionController.text;
+
+      try {
+        // Save the data to Firebase
+        await FirebaseFirestore.instance.collection('users').add({
+          'name': encryptedName,
+          'email': encryptedEmail,
+          'password': hashedPassword,
+          'motherMaidenName': motherMaidenName,
+          'bestFriendsName': bestFriendsName,
+          'childhoodPetsName': childhoodPetsName,
+          'customQuestion': customQuestion,
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Form Submitted Successfully')),
+        );
+
+        // Navigate to the login screen
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return const LoginScreen();
+            },
+          ),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error submitting form')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: _formKey,
       child: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: defaultPadding),
             child: Column(
               children: [
+                // Security Question 1: Mother's Maiden Name
                 TextFormField(
+                  controller: _motherMaidenNameController,
                   textInputAction: TextInputAction.next,
                   cursorColor: kPrimaryColor,
                   decoration: const InputDecoration(
@@ -28,9 +114,18 @@ class SignUpQuestionForm extends StatelessWidget {
                       child: Icon(Icons.person),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your mother's maiden name";
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: defaultPadding),
+
+                // Security Question 2: Childhood Best Friend's Name
                 TextFormField(
+                  controller: _bestFriendsNameController,
                   textInputAction: TextInputAction.next,
                   cursorColor: kPrimaryColor,
                   decoration: const InputDecoration(
@@ -40,9 +135,18 @@ class SignUpQuestionForm extends StatelessWidget {
                       child: Icon(Icons.people),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your childhood best friend's name";
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: defaultPadding),
+
+                // Security Question 3: Childhood Pet's Name
                 TextFormField(
+                  controller: _childhoodPetsNameController,
                   textInputAction: TextInputAction.next,
                   cursorColor: kPrimaryColor,
                   decoration: const InputDecoration(
@@ -52,25 +156,41 @@ class SignUpQuestionForm extends StatelessWidget {
                       child: Icon(Icons.pets),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your childhood pet's name";
+                    }
+                    return null;
+                  },
                 ),
                 const SizedBox(height: defaultPadding),
+
+                // Custom Question (always shown now)
                 TextFormField(
+                  controller: _customQuestionController,
                   textInputAction: TextInputAction.done,
                   cursorColor: kPrimaryColor,
                   decoration: const InputDecoration(
-                    hintText: "Your Own Question",
+                    hintText: "Your Custom Question",
                     prefixIcon: Padding(
                       padding: EdgeInsets.all(defaultPadding),
                       child: Icon(Icons.question_answer),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter your custom question";
+                    }
+                    return null;
+                  },
                 ),
               ],
             ),
           ),
+          
           const SizedBox(height: defaultPadding / 2),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: submitForm,
             child: Text("Sign Up".toUpperCase()),
           ),
           const SizedBox(height: defaultPadding),

@@ -1,20 +1,29 @@
-import 'package:biomark/Screens/SignupQuestions/components/signup_question_form.dart';
 import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 import 'package:biomark/responsive.dart';
 import '../../components/background.dart';
 import 'components/sign_up_top_image.dart';
-
+import 'components/signup_question_form.dart';
 
 class SignUpQuestionScreen extends StatelessWidget {
-  const SignUpQuestionScreen({super.key});
+  final String name;
+  final String email;
+  final String password;
+
+  // Constructor to accept the form data (name, email, password)
+  const SignUpQuestionScreen({
+    super.key,
+    required this.name,
+    required this.email,
+    required this.password,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Background(
+    return Background(
       child: SingleChildScrollView(
         child: Responsive(
-          mobile: MobileSignupQuestionScreen(),
+          mobile: MobileSignupQuestionScreen(name: name, email: email, password: password),
           desktop: Row(
             children: [
               Expanded(
@@ -26,10 +35,9 @@ class SignUpQuestionScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 450,
-                      child: SignUpQuestionForm(),
+                      child: SignUpQuestionForm(name: name, email: email, password: password),
                     ),
                     SizedBox(height: defaultPadding / 2),
-                    // SocalSignUp()
                   ],
                 ),
               )
@@ -42,13 +50,20 @@ class SignUpQuestionScreen extends StatelessWidget {
 }
 
 class MobileSignupQuestionScreen extends StatelessWidget {
+  final String name;
+  final String email;
+  final String password;
+
   const MobileSignupQuestionScreen({
     super.key,
+    required this.name,
+    required this.email,
+    required this.password,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Row(
@@ -56,12 +71,11 @@ class MobileSignupQuestionScreen extends StatelessWidget {
             Spacer(),
             Expanded(
               flex: 8,
-              child: SignUpQuestionForm(),
+              child: SignUpQuestionForm(name: name, email: email, password: password),
             ),
             Spacer(),
           ],
         ),
-        // const SocalSignUp()
       ],
     );
   }
