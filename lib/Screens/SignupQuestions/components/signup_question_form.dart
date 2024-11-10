@@ -1,4 +1,3 @@
-
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -32,32 +31,31 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
   final _customQuestionController = TextEditingController();
 
   // Encrypt method for sensitive data (Name & Email)
-String encryptData(String data) {
-  final key = encrypt.Key.fromUtf8('16charSecretKey!'); // Exactly 16 characters for AES-128
-  final iv = encrypt.IV.fromLength(16); // Initialization vector (IV) should also be 16 bytes
-  final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc)); // Specify AES mode if needed
-  final encrypted = encrypter.encrypt(data, iv: iv);
-  return encrypted.base64;
-}
+  String encryptData(String data) {
+    final key = encrypt.Key.fromUtf8('16charSecretKey!'); // Exactly 16 characters for AES-128
+    final iv = encrypt.IV.fromLength(16); // Initialization vector (IV) should also be 16 bytes
+    final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+    final encrypted = encrypter.encrypt(data, iv: iv);
+    return encrypted.base64;
+  }
 
-
-  // Hash method for password
-  String hashPassword(String password) {
-    return BCrypt.hashpw(password, BCrypt.gensalt());
+  // Hash method for password and security questions
+  String hashData(String data) {
+    return BCrypt.hashpw(data, BCrypt.gensalt());
   }
 
   // Submit the form and save data to Firebase
   Future<void> submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
-      final hashedPassword = hashPassword(widget.password);
+      final hashedPassword = hashData(widget.password);
       final encryptedName = encryptData(widget.name);
       final encryptedEmail = encryptData(widget.email);
 
-      // Get the answers to the security questions
-      final motherMaidenName = _motherMaidenNameController.text;
-      final bestFriendsName = _bestFriendsNameController.text;
-      final childhoodPetsName = _childhoodPetsNameController.text;
-      final customQuestion = _customQuestionController.text;
+      // Hash the answers to the security questions
+      final hashedMotherMaidenName = hashData(_motherMaidenNameController.text);
+      final hashedBestFriendsName = hashData(_bestFriendsNameController.text);
+      final hashedChildhoodPetsName = hashData(_childhoodPetsNameController.text);
+      final hashedCustomQuestion = hashData(_customQuestionController.text);
 
       try {
         // Save the data to Firebase
@@ -65,10 +63,10 @@ String encryptData(String data) {
           'name': encryptedName,
           'email': encryptedEmail,
           'password': hashedPassword,
-          'motherMaidenName': motherMaidenName,
-          'bestFriendsName': bestFriendsName,
-          'childhoodPetsName': childhoodPetsName,
-          'customQuestion': customQuestion,
+          'motherMaidenName': hashedMotherMaidenName,
+          'bestFriendsName': hashedBestFriendsName,
+          'childhoodPetsName': hashedChildhoodPetsName,
+          'customQuestion': hashedCustomQuestion,
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -165,7 +163,7 @@ String encryptData(String data) {
                 ),
                 const SizedBox(height: defaultPadding),
 
-                // Custom Question (always shown now)
+                // Custom Question
                 TextFormField(
                   controller: _customQuestionController,
                   textInputAction: TextInputAction.done,
