@@ -3,7 +3,7 @@ import 'package:biomark/constants.dart';
 import '../RecoveryConfirmation/recovery_confirmation_screen.dart';
 
 class AccountRecoveryScreen extends StatelessWidget {
-  const AccountRecoveryScreen({Key? key}) : super(key: key);
+  const AccountRecoveryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

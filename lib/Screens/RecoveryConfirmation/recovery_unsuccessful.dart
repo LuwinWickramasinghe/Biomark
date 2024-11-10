@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 
 class RecoveryUnsuccessfulScreen extends StatelessWidget {
-  const RecoveryUnsuccessfulScreen({Key? key}) : super(key: key);
+  const RecoveryUnsuccessfulScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

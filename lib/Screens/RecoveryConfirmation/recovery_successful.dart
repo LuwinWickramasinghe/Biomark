@@ -3,7 +3,7 @@ import 'package:biomark/Screens/Login/login_screen.dart';
 import 'package:biomark/constants.dart';
 
 class RecoverySuccessfulScreen extends StatelessWidget {
-  const RecoverySuccessfulScreen({Key? key}) : super(key: key);
+  const RecoverySuccessfulScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
