@@ -3,67 +3,68 @@ import 'package:flutter/material.dart';
 import 'package:biomark/Screens/Welcome/welcome_screen.dart';
 import 'package:biomark/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
-// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+// SQLite for mobile
+import 'package:sqflite/sqflite.dart';
 
 void main() async {
-
-  // Initialize FFI (only if running on desktop)
-  // sqfliteFfiInit();
-  // databaseFactory = databaseFactoryFfi; // Set the database factory for FFI
+  // Ensure Flutter bindings are initialized
   WidgetsFlutterBinding.ensureInitialized();
 
-  if(kIsWeb){
-      await Firebase.initializeApp(
-        options: const FirebaseOptions(
-          apiKey: "AIzaSyAqRlUlkdhlGBhhdIpD5OprYGusukqjmBM",
-          authDomain: "biomark-86cde.firebaseapp.com",
-          projectId: "biomark-86cde",
-          storageBucket: "biomark-86cde.firebasestorage.app",
-          messagingSenderId: "646088274735",
-          appId: "1:646088274735:web:f4b3caf91a5e089931e7da")
+  // Firebase initialization
+  if (kIsWeb) {
+    // Firebase for Web
+    await Firebase.initializeApp(
+      options: const FirebaseOptions(
+        apiKey: "AIzaSyAqRlUlkdhlGBhhdIpD5OprYGusukqjmBM",
+        authDomain: "biomark-86cde.firebaseapp.com",
+        projectId: "biomark-86cde",
+        storageBucket: "biomark-86cde.firebasestorage.app",
+        messagingSenderId: "646088274735",
+        appId: "1:646088274735:web:f4b3caf91a5e089931e7da",
+      ),
     );
-  }else{
+  } else {
+    // Firebase for Mobile (Android/iOS)
     await Firebase.initializeApp();
   }
 
   runApp(const MyApp());
-
-} 
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Auth',
       theme: ThemeData(
-          primaryColor: kPrimaryColor,
-          scaffoldBackgroundColor: Colors.white,
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              foregroundColor: Colors.white,
-              backgroundColor: kPrimaryColor,
-              shape: const StadiumBorder(),
-              maximumSize: const Size(double.infinity, 56),
-              minimumSize: const Size(double.infinity, 56),
-            ),
+        primaryColor: kPrimaryColor,
+        scaffoldBackgroundColor: Colors.white,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            elevation: 0,
+            foregroundColor: Colors.white,
+            backgroundColor: kPrimaryColor,
+            shape: const StadiumBorder(),
+            maximumSize: const Size(double.infinity, 56),
+            minimumSize: const Size(double.infinity, 56),
           ),
-          inputDecorationTheme: const InputDecorationTheme(
-            filled: true,
-            fillColor: kPrimaryLightColor,
-            iconColor: kPrimaryColor,
-            prefixIconColor: kPrimaryColor,
-            contentPadding: EdgeInsets.symmetric(
-                horizontal: defaultPadding, vertical: defaultPadding),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(30)),
-              borderSide: BorderSide.none,
-            ),
-          )),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          filled: true,
+          fillColor: kPrimaryLightColor,
+          iconColor: kPrimaryColor,
+          prefixIconColor: kPrimaryColor,
+          contentPadding:
+              EdgeInsets.symmetric(horizontal: defaultPadding, vertical: defaultPadding),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30)),
+            borderSide: BorderSide.none,
+          ),
+        ),
+      ),
       home: const WelcomeScreen(),
     );
   }
