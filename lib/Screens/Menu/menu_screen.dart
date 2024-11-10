@@ -94,16 +94,17 @@ class _MenuScreenState extends State<MenuScreen> {
             Center(
               child: Column(
                 children: [
-                  ElevatedButton(
+                  if(!isSubscribed)
+                   ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const AccountRecoveryScreen(),
+                            builder: (context) => const EditProfileScreen(),
                           ),
                         );
                       },
-                      child: Text("Account Recovery".toUpperCase()),
+                      child: Text("Subscribe".toUpperCase()),
                     ),
                   const SizedBox(height: 10),
                   if (isSubscribed)
@@ -117,6 +118,19 @@ class _MenuScreenState extends State<MenuScreen> {
                         );
                       },
                       child: Text("Edit Profile".toUpperCase()),
+                    ),
+                  const SizedBox(height: 10),
+                  if (isSubscribed)
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AccountRecoveryScreen(),
+                          ),
+                        );
+                      },
+                      child: Text("Recover Account".toUpperCase()),
                     ),
                 ],
               ),
