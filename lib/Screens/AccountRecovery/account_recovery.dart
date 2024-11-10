@@ -1,4 +1,3 @@
-// account_recovery_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:biomark/viewmodels/account_recovery_view_model.dart';
@@ -38,15 +37,27 @@ class AccountRecoveryScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Date of Birth Field
+              // Date of Birth Field with Date Picker
               TextFormField(
                 controller: viewModel.dobController,
                 decoration: const InputDecoration(
                   labelText: "Date of Birth",
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
-                onTap: () {
-                  // Optional: Open date picker
+                readOnly: true,  // Make the field read-only so the user taps it
+                onTap: () async {
+                  // Show date picker dialog
+                  final DateTime? selectedDate = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime.now(),
+                  );
+                  if (selectedDate != null) {
+                    // Format the selected date and update the controller
+                    viewModel.dobController.text = "${selectedDate.toLocal()}".split(' ')[0];
+                    viewModel.updateFormValidity(); // Update form validity after selecting date
+                  }
                 },
                 onChanged: (_) => viewModel.updateFormValidity(),
               ),
@@ -98,7 +109,7 @@ class AccountRecoveryScreen extends StatelessWidget {
                           }
                         }
                       : null,
-                  child: Text("NEXT"),
+                  child: const Text("NEXT"),
                 ),
               ),
             ],
