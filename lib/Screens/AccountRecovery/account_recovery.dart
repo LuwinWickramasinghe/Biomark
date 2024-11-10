@@ -26,6 +26,18 @@ class AccountRecoveryScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
+              // Email Field
+              TextFormField(
+                controller: viewModel.emailController,
+                decoration: const InputDecoration(
+                  labelText: "Email",
+                  prefixIcon: Icon(Icons.email),
+                ),
+                keyboardType: TextInputType.emailAddress,
+                onChanged: (_) => viewModel.updateFormValidity(),
+              ),
+              const SizedBox(height: 20),
+
               // Full Name Field
               TextFormField(
                 controller: viewModel.nameController,
@@ -44,9 +56,8 @@ class AccountRecoveryScreen extends StatelessWidget {
                   labelText: "Date of Birth",
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
-                readOnly: true,  // Make the field read-only so the user taps it
+                readOnly: true,
                 onTap: () async {
-                  // Show date picker dialog
                   final DateTime? selectedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
@@ -54,9 +65,8 @@ class AccountRecoveryScreen extends StatelessWidget {
                     lastDate: DateTime.now(),
                   );
                   if (selectedDate != null) {
-                    // Format the selected date and update the controller
                     viewModel.dobController.text = "${selectedDate.toLocal()}".split(' ')[0];
-                    viewModel.updateFormValidity(); // Update form validity after selecting date
+                    viewModel.updateFormValidity();
                   }
                 },
                 onChanged: (_) => viewModel.updateFormValidity(),

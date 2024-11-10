@@ -1,10 +1,10 @@
-// account_recovery_view_model.dart
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:biomark/models/account_recovery_model.dart';
 import 'package:biomark/repository/repository.dart';
 
 class AccountRecoveryViewModel extends ChangeNotifier {
+  final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final List<TextEditingController> questionControllers =
@@ -20,7 +20,9 @@ class AccountRecoveryViewModel extends ChangeNotifier {
   bool isVerified = false;
 
   void replaceQuestion(int questionIndex) {
-    List<SecurityQuestion> remainingQuestions = _allQuestions.where((q) => q != _allQuestions[_firstQuestionIndex] && q != _allQuestions[_secondQuestionIndex]).toList();
+    List<SecurityQuestion> remainingQuestions = _allQuestions
+        .where((q) => q != _allQuestions[_firstQuestionIndex] && q != _allQuestions[_secondQuestionIndex])
+        .toList();
 
     if (remainingQuestions.isNotEmpty) {
       final random = Random();
@@ -46,20 +48,38 @@ class AccountRecoveryViewModel extends ChangeNotifier {
   }
 
   void updateFormValidity() {
-    isFormValid = nameController.text.isNotEmpty &&
+    isFormValid = emailController.text.isNotEmpty &&
+                  nameController.text.isNotEmpty &&
                   dobController.text.isNotEmpty &&
                   questionControllers.every((c) => c.text.isNotEmpty);
     notifyListeners();
   }
 
   Future<void> verifyAndProceed() async {
-    final user = AccountRecoveryModel(
-      name: nameController.text,
-      dob: dobController.text,
-      questionAnswers: questionControllers.map((c) => c.text).toList(),
-    );
+    // Create a map for all key-value pairs
+    final Map<String, String> recoveryData = {
+      "email": emailController.text,
+      "name": nameController.text,
+      "date_of_birth": dobController.text,
+      getQuestionLabel(0): questionControllers[0].text,
+      getQuestionLabel(1): questionControllers[1].text,
+    };
+
+    // Pass the map to AccountRecoveryModel
+    final user = AccountRecoveryModel(recoveryData: recoveryData);
 
     isVerified = await _repository.verifyUser(user);
     notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    nameController.dispose();
+    dobController.dispose();
+    for (var controller in questionControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 }

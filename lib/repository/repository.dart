@@ -18,9 +18,11 @@ class Repository {
       // Query Firestore for the user with matching details
       final querySnapshot = await _firestore
           .collection('users')
-          .where('name', isEqualTo: user.name)
-          .where('dob', isEqualTo: user.dob) // Adjust based on your model
+          .where('email', isEqualTo: user.email) // Adjust based on your model
           .get();
+
+ var doc = querySnapshot.docs.first;
+ print(doc);
 
       if (querySnapshot.docs.isNotEmpty) {
         // The user details match and are found in Firestore

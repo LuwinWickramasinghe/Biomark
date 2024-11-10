@@ -1,16 +1,21 @@
-// account_recovery_model.dart
 import 'package:flutter/material.dart';
 
 class AccountRecoveryModel {
-  final String name;
-  final String dob;
-  final List<String> questionAnswers;
+  final Map<String, String> recoveryData;
 
-  AccountRecoveryModel({
-    required this.name,
-    required this.dob,
-    required this.questionAnswers,
-  });
+  AccountRecoveryModel({required this.recoveryData});
+  
+  // Optional: Convenience getters for specific fields, if needed
+  String get name => recoveryData["name"] ?? "";
+  String get dob => recoveryData["date_of_birth"] ?? "";
+  String get email => recoveryData["email"] ?? "";
+  List<String> get questionAnswers {
+    // Filter keys that aren't name, dob, or email for answers
+    return recoveryData.entries
+      .where((entry) => entry.key != "name" && entry.key != "date_of_birth" && entry.key != "email")
+      .map((entry) => entry.value)
+      .toList();
+  }
 }
 
 class SecurityQuestion {
