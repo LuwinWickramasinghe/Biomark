@@ -3,9 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:biomark/Screens/Welcome/welcome_screen.dart';
 import 'package:biomark/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
+// import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() async {
 
+  // Initialize FFI (only if running on desktop)
+  // sqfliteFfiInit();
+  // databaseFactory = databaseFactoryFfi; // Set the database factory for FFI
   WidgetsFlutterBinding.ensureInitialized();
 
   if(kIsWeb){
