@@ -4,7 +4,7 @@ import 'package:biomark/Screens/Welcome/welcome_screen.dart';
 import 'package:biomark/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 // SQLite for mobile
-import 'package:sqflite/sqflite.dart';
+
 
 void main() async {
   // Ensure Flutter bindings are initialized
