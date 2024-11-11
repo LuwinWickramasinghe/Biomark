@@ -5,8 +5,7 @@ import 'package:biomark/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'viewmodels/account_recovery_view_model.dart';  // Import the ViewModel
-// SQLite for mobile
-import 'package:sqflite/sqflite.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
