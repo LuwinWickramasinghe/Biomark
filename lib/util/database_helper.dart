@@ -24,16 +24,10 @@ class DatabaseHelper {
           CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT NOT NULL,
+            name TEXT,
             password TEXT NOT NULL
           )
           ''',
-        );
-        db.execute(
-          '''
-          CREATE TABLE cached_user (
-            email TEXT PRIMARY KEY
-          )
-          '''
         );
       },
       version: 1,
@@ -50,6 +44,15 @@ class DatabaseHelper {
     );
   }
 
+    Future<void> cacheName(String name) async {
+    final db = await database;
+    await db.insert(
+      'users',
+      {'name': name},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   // Method to retrieve the cached email
   Future<String> getCachedEmail() async {
     final db = await database;
@@ -61,11 +64,16 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first['email'] as String : '';
   }
 
-  // Method to clear cached email if needed
-  Future<void> clearCachedEmail() async {
+    Future<String> getCachedName() async {
     final db = await database;
-    await db.delete('cached_user');
+    final result = await db.query(
+      'users',
+      columns: ['name'],
+      limit: 1,
+    );
+    return result.isNotEmpty ? result.first['name'] as String : '';
   }
+
 
   // Method to cache user data
   Future<void> cacheUser(Map<String, dynamic>? userData) async {
@@ -86,6 +94,7 @@ class DatabaseHelper {
             'users',
             {
               'email': userData['email'],
+              'name': userData['name'],
               'password': userData['password'],
             },
             conflictAlgorithm: ConflictAlgorithm.replace,
@@ -147,4 +156,25 @@ class DatabaseHelper {
     print("Error clearing cache: $e");
   }
 }
+
+
+  // Add the deleteEmail method to delete based on old email
+  Future<void> deleteEmail(String oldEmail) async {
+    final db = await database;
+    await db.delete(
+      'users',
+      where: 'email = ?',
+      whereArgs: [oldEmail],
+    );
+  }
+
+  // Add the insertEmail method to insert a new email
+  Future<void> insertEmail(String newEmail) async {
+    final db = await database;
+    await db.insert(
+      'users',
+      {'email': newEmail},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 }

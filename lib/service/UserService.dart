@@ -35,7 +35,8 @@ class UserService {
 Future<String> getCurrentUserEmail() async {
   // Attempt to get the email from the local cache (email is guaranteed to be available)
   String email = await _dbHelper.getCachedEmail();
-
+  print('caaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaached email');
+  print(email);
 
   if (email.isEmpty) {
     Map<String, dynamic>? user = await _fbHelper.getUserFromFirebase(email);
@@ -47,23 +48,66 @@ Future<String> getCurrentUserEmail() async {
   return email;
 }
 
+Future<String> getCurrentUserName() async {
+  // Attempt to get the email from the local cache (email is guaranteed to be available)
+  String name = await _dbHelper.getCachedName();
+
+  if (name.isEmpty) {
+    Map<String, dynamic>? user = await _fbHelper.getUserFromFirebase(name);
+    name = user?['name'] ?? '';
+    if (name.isNotEmpty) {
+      await _dbHelper.cacheEmail(name);
+    }
+  }
+  return name;
+}
+
 
   // Method to save form data to Firebase
   Future<void> saveFormData(Map<String, dynamic> formData, bool changeEmail) async {
     await _fbHelper.saveFormToFirebase(formData, changeEmail);
   }
 
-  Future<Map<String, dynamic>?> getUserProfile() async {
-    try {
-      // Replace 'users' with your actual collection name in Firebase
-      DocumentSnapshot userDoc = await _firestore.collection('subscription').doc('email').get();
-
-      if (userDoc.exists) {
-        return userDoc.data() as Map<String, dynamic>;
-      }
-    } catch (e) {
-      print("Error fetching user profile: $e");
-    }
-    return null;
+  Future<void> updateEmail(Map<String, dynamic> formData) async {
+    await _fbHelper.saveEmailToFirebase(formData);
+    await updateLocalEmail(formData['oldemail'], formData['email']);
   }
+
+  Future<void> updateLocalEmail(String oldEmail, String newEmail) async {
+  final db = _dbHelper;
+  try {
+    // Delete the old email
+    await db.deleteEmail(oldEmail);
+
+    // Insert the new email
+    await db.insertEmail(newEmail);
+
+    print("Email updated successfully");
+  } catch (e) {
+    print("Error updating email: $e");
+  }
+}
+
+
+Future<Map<String, dynamic>?> getUserProfile(String email) async {
+  try {
+    // Fetch the document for the user by querying the 'email' field
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('subscription')
+        .where('email', isEqualTo: email) // Query based on the 'email' field
+        .limit(1) // Ensure only one document is returned
+        .get();
+      
+    print('sssssssssssssssssssssssssss');
+
+    if (querySnapshot.docs.isNotEmpty) {
+      return querySnapshot.docs.first.data(); // Return the first matched user document
+    } else {
+      return null; // User not found
+    }
+  } catch (e) {
+    print("Error fetching user from Firebase: $e");
+    return null; // Return null on error
+  }
+}
 }

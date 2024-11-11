@@ -24,7 +24,7 @@ class SubscribeSuccessfulScreen extends StatelessWidget {
             ),
             const SizedBox(height: defaultPadding),
             const Text(
-              "Successful!y Subscribed",
+              "Successfully Subscribed",
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,

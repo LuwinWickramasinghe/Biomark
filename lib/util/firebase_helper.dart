@@ -40,4 +40,44 @@ class FirebaseHelper {
     }
   }
 
+Future<void> saveEmailToFirebase(Map<String, dynamic> formData) async {
+  String oldEmail = formData['oldemail'];
+  String newEmail = formData['email'];
+
+  // Helper function to update email in a specific collection
+  Future<void> _updateEmail(String collectionName) async {
+    try {
+      // Query to find the document with the old email
+      final querySnapshot = await _firestore
+          .collection(collectionName)
+          .where('email', isEqualTo: oldEmail)
+          .get();
+
+      // Check if a document with the old email exists
+      if (querySnapshot.docs.isNotEmpty) {
+        // Get the document ID
+        final documentId = querySnapshot.docs.first.id;
+
+        // Update the email field in the document
+        await _firestore.collection(collectionName).doc(documentId).update({
+          'email': newEmail,
+        });
+
+        print("Updated email in $collectionName collection.");
+      } else {
+        print("No document found with the old email in $collectionName collection.");
+      }
+    } catch (e) {
+      print("Error updating email in $collectionName collection: $e");
+    }
+  }
+
+  // Update email in both 'subscription' and 'users' collections
+  await _updateEmail('subscription');
+  await _updateEmail('users');
+}
+
+
+  
+
 }

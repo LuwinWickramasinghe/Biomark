@@ -17,7 +17,7 @@ class _EditProfileScreenState extends State<EditEmail> {
   final TextEditingController _newEmailController = TextEditingController();
 
   late final UserService _userService;
-  bool isSubscribed = false;
+  bool isSubmitted = false;
 
   @override
   void initState() {
@@ -36,21 +36,22 @@ class _EditProfileScreenState extends State<EditEmail> {
   Future<void> _saveForm() async {
     if (_formKey.currentState!.validate()) {
       Map<String, dynamic> formData = {
-        'email': _emailController.text,
-        'newemail': _newEmailController.text,
+        'oldemail': _emailController.text,
+        'email': _newEmailController.text,
       };
 
       try {
-        await _userService.saveFormData(formData, true);
+        // Attempt to save form data
+        await _userService.updateEmail(formData);
         setState(() {
-          isSubscribed = true;
+          isSubmitted = true;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Profile updated successfully!")),
         );
       } catch (e) {
         setState(() {
-          isSubscribed = false;
+          isSubmitted = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Failed to update profile.")),
@@ -58,14 +59,20 @@ class _EditProfileScreenState extends State<EditEmail> {
       }
     }
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => isSubscribed
-            ? const SubscribeSuccessfulScreen()
-            : const SubscribeUnsuccessfulScreen(),
-      ),
-    );
+    if (isSubmitted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const SubscribeSuccessfulScreen()),
+      );
+    } else {
+      // Failed submission
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const SubscribeUnsuccessfulScreen()),
+      );
+    }
   }
 
   @override
