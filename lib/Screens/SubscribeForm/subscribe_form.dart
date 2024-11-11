@@ -20,6 +20,8 @@ class _SubscribeFormState extends State<SubscribeForm> {
   final TextEditingController _locationController = TextEditingController();
   final TextEditingController _bloodGroupController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
+  final TextEditingController _ethnicityController = TextEditingController();
+  final TextEditingController _eyeColorController = TextEditingController();
 
   late final UserService _userService;
   bool isSubscribed = false;
@@ -36,7 +38,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
     String? email = await _userService.getCurrentUserEmail();
     _emailController.text = email;
     String? name = await _userService.getCurrentUserName();
-    _nameController.text = name;
+
 
 
     String preHashId = name + email;
@@ -56,6 +58,8 @@ class _SubscribeFormState extends State<SubscribeForm> {
         'location': _locationController.text,
         'bloodGroup': _bloodGroupController.text,
         'height': _heightController.text,
+        'ethnicity': _ethnicityController.text,
+        'eyeColor': _eyeColorController.text,
         'isSubscribed': true,
       };
 
@@ -158,6 +162,23 @@ class _SubscribeFormState extends State<SubscribeForm> {
                   controller: _heightController,
                   decoration: const InputDecoration(
                     labelText: "Height",
+                    prefixIcon: Icon(Icons.height),
+                  ),
+                ),
+                const SizedBox(height: defaultPadding),
+                
+                TextFormField(
+                  controller: _ethnicityController,
+                  decoration: const InputDecoration(
+                    labelText: "Ethnicity",
+                    prefixIcon: Icon(Icons.height),
+                  ),
+                ),
+                const SizedBox(height: defaultPadding),
+                TextFormField(
+                  controller: _eyeColorController,
+                  decoration: const InputDecoration(
+                    labelText: "Eye Colour",
                     prefixIcon: Icon(Icons.height),
                   ),
                 ),
