@@ -26,21 +26,42 @@ class MobileWelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        WelcomeImage(),
-        Row(
-          children: [
-            Spacer(),
-            Expanded(
-              flex: 8,
-              child: LoginAndSignupBtn(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+          horizontal: 20.0), // Add padding for better alignment
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment:
+            CrossAxisAlignment.center, // Align children to the center
+        children: <Widget>[
+          // Added spacing and color to improve the UI
+          Container(
+            margin: const EdgeInsets.only(bottom: 30.0),
+            child: const WelcomeImage(),
+          ),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+                vertical: 15.0), // Padding around the button
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(86, 68, 137,
+                  255), // Background color for the button container
+              borderRadius: BorderRadius.circular(
+                  8.0), // Rounded corners for the button container
             ),
-            Spacer(),
-          ],
-        ),
-      ],
+            child: const Row(
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Center the buttons horizontally
+              children: [
+                Expanded(
+                  flex: 8,
+                  child: LoginAndSignupBtn(),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -49,11 +49,12 @@ class AccountRecoveryScreen extends StatelessWidget {
                 readOnly: true,
                 onTap: () async {
                   final DateTime selectedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  ) ?? DateTime.now();
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime.now(),
+                      ) ??
+                      DateTime.now();
                   viewModel.dobController.text =
                       "${selectedDate.toLocal()}".split(' ')[0];
                   viewModel.updateFormValidity();

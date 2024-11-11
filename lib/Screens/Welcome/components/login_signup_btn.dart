@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
+import '../../EditProfile/edit_email.dart';
+import '../../EditProfile/edit_password.dart';
+import '../../EditProfile/edit_profile.dart';
 import '../../Login/login_screen.dart';
+import '../../RecoveryConfirmation/recovery_confirmation_screen.dart';
+import '../../RecoveryConfirmation/recovery_successful.dart';
+import '../../RecoveryConfirmation/recovery_unsuccessful.dart';
 import '../../Signup/signup_screen.dart';
 import '../../Menu/menu_screen.dart';
 
@@ -28,9 +33,10 @@ class LoginAndSignupBtn extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
-            ), backgroundColor: kPrimaryColor, // Main button color
-            elevation: 15, // Shadow to make it 3D
-            shadowColor: Colors.black.withOpacity(0.3), // Custom shadow color
+            ),
+            backgroundColor: Colors.blueAccent,
+            elevation: 12,
+            shadowColor: Colors.black.withOpacity(0.3),
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
           ),
           child: Text(
@@ -38,7 +44,8 @@ class LoginAndSignupBtn extends StatelessWidget {
             style: const TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              fontFamily: 'Montserrat'
+              fontFamily: 'Montserrat',
+              color: Colors.white,
             ),
           ),
         ),
@@ -57,9 +64,10 @@ class LoginAndSignupBtn extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
-            ), backgroundColor: kPrimaryLightColor,
-            elevation: 10, // Shadow to make it 3D
-            shadowColor: Colors.black.withOpacity(0.3), // Custom shadow color
+            ),
+            backgroundColor: Colors.blue[100],
+            elevation: 12,
+            shadowColor: Colors.black.withOpacity(0.3),
             padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
           ),
           child: Text(
@@ -68,7 +76,7 @@ class LoginAndSignupBtn extends StatelessWidget {
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Colors.black,
-              fontFamily: 'Montserrat'
+              fontFamily: 'Montserrat',
             ),
           ),
         ),
@@ -79,18 +87,28 @@ class LoginAndSignupBtn extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return const MenuScreen();
+                  return const EditProfileScreen();
                 },
               ),
             );
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryLightColor,
-            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            backgroundColor: Colors.blue[100],
+            elevation: 12,
+            shadowColor: Colors.black.withOpacity(0.3),
+            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
           ),
           child: Text(
-            "Sign Up".toUpperCase(),
-            style: const TextStyle(color: Colors.black),
+            "Go to Menu".toUpperCase(),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Colors.black,
+              fontFamily: 'Montserrat',
+            ),
           ),
         ),
       ],

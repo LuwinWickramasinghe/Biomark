@@ -42,7 +42,14 @@ class _MenuScreenState extends State<MenuScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Biomark Profile'),
+        title: const Text(
+          'Biomark Profile',
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         actions: [
           LogoutComponent(), // Use the LogoutComponent here
         ],
@@ -56,11 +63,18 @@ class _MenuScreenState extends State<MenuScreen> {
             const Center(
               child: Column(
                 children: [
+                  CircleAvatar(
+                    radius: 50,
+                    backgroundImage: AssetImage(
+                        'assets/user_avatar.png'), // Placeholder avatar
+                  ),
+                  SizedBox(height: 10),
                   Text(
                     'Welcome, [Full Name]',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Montserrat',
                     ),
                   ),
                 ],
@@ -103,9 +117,8 @@ class _MenuScreenState extends State<MenuScreen> {
               leading: const Icon(Icons.subscriptions),
               title: const Text('Subscription Status'),
               subtitle: Text(
-                isSubscribed == null
-                    ? 'Loading...'
-                    : isSubscribed! ? 'Subscribed' : 'Not Subscribed',
+                '[User Height]',
+                style: TextStyle(fontFamily: 'Montserrat'),
               ),
             ),
             const SizedBox(height: 20),
