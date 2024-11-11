@@ -29,9 +29,10 @@ class AccountRecoveryScreen extends StatelessWidget {
               // Full Name Field
               TextFormField(
                 controller: viewModel.nameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Full Name",
-                  prefixIcon: Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person),
+                  errorText: viewModel.nameError,
                 ),
                 onChanged: (_) => viewModel.updateFormValidity(),
               ),
@@ -40,9 +41,10 @@ class AccountRecoveryScreen extends StatelessWidget {
               // Date of Birth Field with Date Picker
               TextFormField(
                 controller: viewModel.dobController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: "Date of Birth",
-                  prefixIcon: Icon(Icons.calendar_today),
+                  prefixIcon: const Icon(Icons.calendar_today),
+                  errorText: viewModel.dobError,
                 ),
                 readOnly: true,
                 onTap: () async {
@@ -57,7 +59,6 @@ class AccountRecoveryScreen extends StatelessWidget {
                     viewModel.updateFormValidity();
                   }
                 },
-                onChanged: (_) => viewModel.updateFormValidity(),
               ),
               const SizedBox(height: 20),
 
@@ -71,6 +72,7 @@ class AccountRecoveryScreen extends StatelessWidget {
                     icon: const Icon(Icons.refresh),
                     onPressed: () => viewModel.replaceQuestion(0),
                   ),
+                  errorText: viewModel.questionErrors[0],
                 ),
                 onChanged: (_) => viewModel.updateFormValidity(),
               ),
@@ -86,9 +88,20 @@ class AccountRecoveryScreen extends StatelessWidget {
                     icon: const Icon(Icons.refresh),
                     onPressed: () => viewModel.replaceQuestion(1),
                   ),
+                  errorText: viewModel.questionErrors[1],
                 ),
                 onChanged: (_) => viewModel.updateFormValidity(),
               ),
+              const SizedBox(height: 20),
+
+              // Display error message for the overall verification status
+              if (viewModel.verificationError != null)
+                Center(
+                  child: Text(
+                    viewModel.verificationError!,
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
               const SizedBox(height: 20),
 
               // Next Button

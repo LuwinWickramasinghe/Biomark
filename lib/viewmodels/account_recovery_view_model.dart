@@ -17,6 +17,12 @@ class AccountRecoveryViewModel extends ChangeNotifier {
 
   bool isFormValid = false;
   bool isVerified = false;
+  
+  // Error messages for each field
+  String? nameError;
+  String? dobError;
+  List<String?> questionErrors = [null, null];
+  String? verificationError;
 
   void replaceQuestion(int questionIndex) {
     List<SecurityQuestion> remainingQuestions = _allQuestions
@@ -47,14 +53,16 @@ class AccountRecoveryViewModel extends ChangeNotifier {
   }
 
   void updateFormValidity() {
-    isFormValid = nameController.text.isNotEmpty &&
-                  dobController.text.isNotEmpty &&
-                  questionControllers.every((c) => c.text.isNotEmpty);
+    nameError = nameController.text.isEmpty ? 'Name is required' : null;
+    dobError = dobController.text.isEmpty ? 'Date of Birth is required' : null;
+    questionErrors[0] = questionControllers[0].text.isEmpty ? 'Answer is required' : null;
+    questionErrors[1] = questionControllers[1].text.isEmpty ? 'Answer is required' : null;
+
+    isFormValid = nameError == null && dobError == null && questionErrors.every((e) => e == null);
     notifyListeners();
   }
 
   Future<void> verifyAndProceed() async {
-    // Create a map for all key-value pairs without email
     final Map<String, String> recoveryData = {
       "name": nameController.text,
       "date_of_birth": dobController.text,
@@ -62,10 +70,10 @@ class AccountRecoveryViewModel extends ChangeNotifier {
       getQuestionLabel(1): questionControllers[1].text,
     };
 
-    // Pass the map to AccountRecoveryModel
     final user = AccountRecoveryModel(recoveryData: recoveryData);
 
     isVerified = await _repository.verifyUser(user);
+    verificationError = isVerified ? null : 'Verification failed. Please check your answers.';
     notifyListeners();
   }
 
