@@ -68,6 +68,27 @@ Future<String> getCurrentUserName() async {
     await _fbHelper.saveFormToFirebase(formData);
   }
 
+  Future<void> updateEmail(Map<String, dynamic> formData) async {
+    await _fbHelper.saveEmailToFirebase(formData);
+    await updateLocalEmail(formData['oldemail'], formData['email']);
+  }
+
+  Future<void> updateLocalEmail(String oldEmail, String newEmail) async {
+  final db = _dbHelper;
+  try {
+    // Delete the old email
+    await db.deleteEmail(oldEmail);
+
+    // Insert the new email
+    await db.insertEmail(newEmail);
+
+    print("Email updated successfully");
+  } catch (e) {
+    print("Error updating email: $e");
+  }
+}
+
+
 Future<Map<String, dynamic>?> getUserProfile(String email) async {
   try {
     // Fetch the document for the user by querying the 'email' field
