@@ -1,5 +1,6 @@
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:bcrypt/bcrypt.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../Login/login_screen.dart';
@@ -40,16 +41,22 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
   }
 
   // Hash method for password and security questions
-  String hashData(String data) {
-    return BCrypt.hashpw(data, BCrypt.gensalt());
-  }
+  String hashData(String password) {
+  // Convert the password into bytes
+  var bytes = utf8.encode(password);
+
+  // Perform SHA256 hashing
+  var digest = sha256.convert(bytes);
+
+  return digest.toString(); // Return the hashed password
+}
 
   // Submit the form and save data to Firebase
   Future<void> submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       final hashedPassword = hashData(widget.password);
       final encryptedName = encryptData(widget.name);
-      final encryptedEmail = encryptData(widget.email);
+      final email = widget.email;
 
       // Hash the answers to the security questions
       final hashedMotherMaidenName = hashData(_motherMaidenNameController.text);
@@ -61,7 +68,7 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
         // Save the data to Firebase
         await FirebaseFirestore.instance.collection('users').add({
           'name': encryptedName,
-          'email': encryptedEmail,
+          'email': email,
           'password': hashedPassword,
           'motherMaidenName': hashedMotherMaidenName,
           'bestFriendsName': hashedBestFriendsName,

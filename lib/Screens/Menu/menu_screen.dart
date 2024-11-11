@@ -1,10 +1,41 @@
 import 'package:flutter/material.dart';
-
+// import '../SubscribeForm/subscribe_form.dart';
+// import 'package:biomark/Screens/EditProfile/edit_email.dart';
+// import 'package:biomark/Screens/EditProfile/edit_password.dart';
 import '../EditProfile/edit_profile.dart';
 import '../AccountRecovery/account_recovery.dart';
+import '../../service/UserService.dart';
 
-class MenuScreen extends StatelessWidget {
+class MenuScreen extends StatefulWidget {
   const MenuScreen({super.key});
+
+  @override
+  _MenuScreenState createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  final UserService _userService = UserService();
+  bool isSubscribed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSubscriptionStatus();
+  }
+
+  Future<void> _fetchSubscriptionStatus() async {
+    final userProfile = await _userService.getUserProfile();
+    if (userProfile != null && userProfile.containsKey('isSubscribed')) {
+      setState(() {
+        //isSubscribed = userProfile['isSubscribed'] as bool;
+        isSubscribed = true;
+      });
+    } else {
+      setState(() {
+        isSubscribed = true; // Default if not found
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,18 +152,21 @@ class MenuScreen extends StatelessWidget {
                 style: TextStyle(fontFamily: 'Montserrat'),
               ),
             ),
+
             const SizedBox(height: 20),
 
             // Action Section
-            Center(
-              child: Column(
-                children: [
-                  ElevatedButton(
+
+              Center(
+
+                child: Column(
+                  children: [
+                    if(isSubscribed)...[ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const EditProfileScreen(),
+                          builder: (context) => EditEmail(),
                         ),
                       );
                     },
@@ -149,7 +183,7 @@ class MenuScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "Edit Profile".toUpperCase(),
+                      "Edit Email".toUpperCase(),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -164,7 +198,20 @@ class MenuScreen extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AccountRecoveryScreen(),
+                          builder: (context) => const EditPassword(),
+                              ),
+                            );
+                          },
+                          child: Text("Change Password".toUpperCase()),
+                        ),
+                    ],
+                    if(!isSubscribed)
+                      ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubscribeForm(),
                         ),
                       );
                     },
@@ -181,7 +228,7 @@ class MenuScreen extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      "Account Recovery".toUpperCase(),
+                      "Subscribe".toUpperCase(),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -189,10 +236,10 @@ class MenuScreen extends StatelessWidget {
                         color: Colors.black,
                       ),
                     ),
-                  ),
-                ],
+                  ),const SizedBox(height: 10),
+                  ],
+                ),
               ),
-            ),
           ],
         ),
       ),
