@@ -131,4 +131,20 @@ class DatabaseHelper {
     );
     return result.isNotEmpty ? result.first['password'] as String? : null;
   }
+
+  Future<void> clearCache() async {
+  final db = await database;
+
+  try {
+    // Clear all records from the users table (or specific data as required)
+    await db.delete('users'); // Deletes all rows from 'users' table
+
+    // Optionally, clear any other specific cache table
+    //await db.delete('cached_user'); // Deletes all rows from 'cached_user' table
+
+    print("Cache cleared successfully");
+  } catch (e) {
+    print("Error clearing cache: $e");
+  }
+}
 }

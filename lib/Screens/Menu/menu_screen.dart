@@ -1,3 +1,7 @@
+// lib/screens/menu_screen.dart
+
+import 'package:biomark/Screens/EditProfile/edit_email.dart';
+import 'package:biomark/Screens/EditProfile/edit_password.dart';
 import 'package:flutter/material.dart';
 // import '../SubscribeForm/subscribe_form.dart';
 // import 'package:biomark/Screens/EditProfile/edit_email.dart';
@@ -17,7 +21,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final UserService _userService = UserService();
-  bool isSubscribed = false;
+  bool? isSubscribed = false;
 
   @override
   void initState() {
@@ -29,12 +33,11 @@ class _MenuScreenState extends State<MenuScreen> {
     final userProfile = await _userService.getUserProfile();
     if (userProfile != null && userProfile.containsKey('isSubscribed')) {
       setState(() {
-        //isSubscribed = userProfile['isSubscribed'] as bool;
-        isSubscribed = true;
+        isSubscribed = userProfile['isSubscribed'] as bool?;
       });
     } else {
       setState(() {
-        isSubscribed = true; // Default if not found
+        isSubscribed = false; // Default if not found
       });
     }
   }
@@ -52,12 +55,7 @@ class _MenuScreenState extends State<MenuScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              // Handle logout functionality
-            },
-          ),
+          LogoutComponent(), // Use the LogoutComponent here
         ],
       ),
       body: Padding(
@@ -149,99 +147,92 @@ class _MenuScreenState extends State<MenuScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+            if (isSubscribed != null && isSubscribed!) ...[
+              const Text(
+                'Personal Information',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const Divider(),
+              const ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: Text('Date of Birth'),
+                subtitle: Text('[User Date of Birth]'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.location_on),
+                title: Text('Location of Birth'),
+                subtitle: Text('[User Location]'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.bloodtype),
+                title: Text('Blood Group'),
+                subtitle: Text('[User Blood Group]'),
+              ),
+              const ListTile(
+                leading: Icon(Icons.height),
+                title: Text('Height'),
+                subtitle: Text('[User Height]'),
+              ),
+              const SizedBox(height: 10),
+            ],
+
+            // Subscription Status Section
+            ListTile(
+              leading: const Icon(Icons.subscriptions),
+              title: const Text('Subscription Status'),
               subtitle: Text(
                 '[User Height]',
                 style: TextStyle(fontFamily: 'Montserrat'),
               ),
             ),
-
             const SizedBox(height: 20),
 
             // Action Section
-
-              Center(
-
-                child: Column(
-                  children: [
-                    if(isSubscribed)...[ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EditEmail(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      backgroundColor: Colors.blueAccent,
-                      elevation: 12,
-                      shadowColor: Colors.black.withOpacity(0.3),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 32,
-                      ),
+            Center(
+              child: Column(
+                children: [
+                  if (isSubscribed != null && isSubscribed!) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditEmail(),
+                          ),
+                        );
+                      },
+                      child: Text("Edit Email".toUpperCase()),
                     ),
-                    child: Text(
-                      "Edit Email".toUpperCase(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        fontFamily: 'Montserrat',
-                        color: Colors.white,
-                      ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditPassword(),
+                          ),
+                        );
+                      },
+                      child: Text("Change Password".toUpperCase()),
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EditPassword(),
-                              ),
-                            );
-                          },
-                          child: Text("Change Password".toUpperCase()),
-                        ),
-                    ],
-                    if(!isSubscribed)
-                      ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubscribeForm(),
-                        ),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      backgroundColor: Colors.blue[100],
-                      elevation: 12,
-                      shadowColor: Colors.black.withOpacity(0.3),
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 32,
-                      ),
-                    ),
-                    child: Text(
-                      "Subscribe".toUpperCase(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        fontFamily: 'Montserrat',
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),const SizedBox(height: 10),
                   ],
-                ),
+                  if (isSubscribed == null || !isSubscribed!) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SubscribeForm(),
+                          ),
+                        );
+                      },
+                      child: Text("Subscribe".toUpperCase()),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ],
               ),
+            ),
           ],
         ),
       ),

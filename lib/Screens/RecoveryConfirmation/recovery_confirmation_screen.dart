@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import '../RecoveryConfirmation/recovery_successful.dart';
 import '../RecoveryConfirmation/recovery_unsuccessful.dart';
-import 'package:biomark/constants.dart';
+import 'package:biomark/repository/repository.dart';
 
 class PasswordResetScreen extends StatefulWidget {
-  const PasswordResetScreen({super.key});
+  final String userEmail;
+
+  const PasswordResetScreen({Key? key, required this.userEmail})
+      : super(key: key);
 
   @override
   _PasswordResetScreenState createState() => _PasswordResetScreenState();
@@ -16,27 +19,47 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
-  bool _isSuccessful = false; // State variable to indicate success or failure
+  bool _isSuccessful = false;
+  final Repository _repository = Repository();
 
-  void _resetPassword() {
+  void _resetPassword() async {
     if (_formKey.currentState!.validate()) {
+      // Check if the passwords match
       setState(() {
         _isSuccessful =
-            _passwordController.text == "newpassword"; // Example check
+            _passwordController.text == _confirmPasswordController.text;
       });
 
-      // Navigate based on the state
       if (_isSuccessful) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const RecoverySuccessfulScreen()),
-        );
+        print(_passwordController.text);
+        // Call FirebaseHelper to update password in Firestore
+        String result = await _repository.updatePassword(
+            widget.userEmail, _passwordController.text);
+        print(result);
+        if (result == 'Password updated successfully') {
+          // Navigate to the successful screen
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RecoverySuccessfulScreen(),
+            ),
+          );
+        } else {
+          // Display failure and navigate to unsuccessful screen
+          Navigator.pushReplacement(
+            // ignore: use_build_context_synchronously
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RecoveryUnsuccessfulScreen(),
+            ),
+          );
+        }
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => const RecoveryUnsuccessfulScreen()),
+        // If passwords don't match, show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Passwords do not match! Please try again."),
+          ),
         );
       }
     }
@@ -156,12 +179,5 @@ class _PasswordResetScreenState extends State<PasswordResetScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _passwordController.dispose();
-    _confirmPasswordController.dispose();
-    super.dispose();
   }
 }
