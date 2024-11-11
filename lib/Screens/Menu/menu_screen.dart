@@ -16,13 +16,15 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final UserService _userService = UserService();
-<<<<<<< HEAD
-  bool isSubscribed = false;
-  
 
-=======
-  bool? isSubscribed = false;
->>>>>>> 04a451ace3d8c178777fae2a898d1a1baf46eff1
+  bool isSubscribed = false;
+  String? fullName;
+  String? dob;
+  String? location;
+  String? bloodGroup;
+  String? height;
+
+
 
   @override
   void initState() {
@@ -41,14 +43,18 @@ class _MenuScreenState extends State<MenuScreen> {
     print(userProfile);
     if (userProfile != null && userProfile.containsKey('isSubscribed')) {
       setState(() {
-<<<<<<< HEAD
+
         isSubscribed = userProfile['isSubscribed'] as bool;
         print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
         print(isSubscribed);
-      
-=======
-        isSubscribed = userProfile['isSubscribed'] as bool?;
->>>>>>> 04a451ace3d8c178777fae2a898d1a1baf46eff1
+
+        fullName = userProfile['fullName'] as String?;
+        dob = userProfile['dob'] as String?;
+        location = userProfile['location'] as String?;
+        bloodGroup = userProfile['bloodGroup'] as String?;
+        height = userProfile['height'] as String?;
+
+
       });
     } else {
       setState(() {
@@ -72,12 +78,12 @@ class _MenuScreenState extends State<MenuScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Profile Header Section
-            const Center(
+            Center(
               child: Column(
                 children: [
                   Text(
-                    'Welcome, [Full Name]',
-                    style: TextStyle(
+                    'Welcome, ${fullName ?? '[Full Name]'}',
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -94,25 +100,25 @@ class _MenuScreenState extends State<MenuScreen> {
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Divider(),
-              const ListTile(
-                leading: Icon(Icons.calendar_today),
-                title: Text('Date of Birth'),
-                subtitle: Text('[User Date of Birth]'),
+              ListTile(
+                leading: const Icon(Icons.calendar_today),
+                title: const Text('Date of Birth'),
+                subtitle: Text(dob ?? '[User Date of Birth]'),
               ),
-              const ListTile(
-                leading: Icon(Icons.location_on),
-                title: Text('Location of Birth'),
-                subtitle: Text('[User Location]'),
+              ListTile(
+                leading: const Icon(Icons.location_on),
+                title: const Text('Location of Birth'),
+                subtitle: Text(location ?? '[User Location]'),
               ),
-              const ListTile(
-                leading: Icon(Icons.bloodtype),
-                title: Text('Blood Group'),
-                subtitle: Text('[User Blood Group]'),
+              ListTile(
+                leading: const Icon(Icons.bloodtype),
+                title: const Text('Blood Group'),
+                subtitle: Text(bloodGroup ?? '[User Blood Group]'),
               ),
-              const ListTile(
-                leading: Icon(Icons.height),
-                title: Text('Height'),
-                subtitle: Text('[User Height]'),
+              ListTile(
+                leading: const Icon(Icons.height),
+                title: const Text('Height'),
+                subtitle: Text(height ?? '[User Height]'),
               ),
               const SizedBox(height: 10),
             ],
