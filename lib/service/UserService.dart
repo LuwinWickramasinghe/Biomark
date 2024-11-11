@@ -86,14 +86,12 @@ Future<String> getCurrentUserName() async {
 
 Future<Map<String, dynamic>?> getUserProfile(String email) async {
   try {
-    // Fetch the document for the user by querying the 'email' field
     final querySnapshot = await FirebaseFirestore.instance
         .collection('subscription')
         .where('email', isEqualTo: email) // Query based on the 'email' field
         .limit(1) // Ensure only one document is returned
         .get();
       
-    print('sssssssssssssssssssssssssss');
 
     if (querySnapshot.docs.isNotEmpty) {
       return querySnapshot.docs.first.data(); // Return the first matched user document
