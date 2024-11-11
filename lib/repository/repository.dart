@@ -19,18 +19,19 @@ class Repository {
  Future<bool> _verifyInFirebase(AccountRecoveryModel user) async {
   try {
     // Encrypt the name and dob as they are stored in Firestore
-    print(user);
+    print(user.recoveryData);
    String encryptedName = encryptData(user.recoveryData['name'] ?? '');
    print(user.recoveryData['name']);
  // Use your encryption function
     String encryptedDob = encryptData(user.recoveryData['date_of_birth']?? ''); // Use your encryption function
 print('here');
     // Hash the security question answers
-    String hashedAnswer1 = hashPassword(user.recoveryData[toCamelCase(user.recoveryData.keys.elementAt(2))]?? ''); // Replace index as needed
-    String hashedAnswer2 = hashPassword(user.recoveryData[toCamelCase(user.recoveryData.keys.elementAt(3))]?? ''); 
+    String hashedAnswer1 = hashPassword(user.recoveryData[user.recoveryData.keys.elementAt(2)]?? ''); // Replace index as needed
+    String hashedAnswer2 = hashPassword(user.recoveryData[user.recoveryData.keys.elementAt(3)]?? ''); 
     
     print(hashedAnswer1);
     print(toCamelCase(user.recoveryData.keys.elementAt(3)));
+    print(user.recoveryData[toCamelCase(user.recoveryData.keys.elementAt(2))]);
     print(toCamelCase(user.recoveryData.keys.elementAt(2)));// Replace index as needed
 
     // Query Firestore with the encrypted name, encrypted dob, and hashed answers
@@ -39,7 +40,7 @@ print('here');
         .where('name', isEqualTo: encryptedName)
        // .where('dob', isEqualTo: encryptedDob)
       //  .where(user.recoveryData.keys.elementAt(2), isEqualTo: hashedAnswer1)
-        .where(user.recoveryData.keys.elementAt(3), isEqualTo: hashedAnswer2)
+        .where(toCamelCase(user.recoveryData.keys.elementAt(3)), isEqualTo: hashedAnswer2)
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {

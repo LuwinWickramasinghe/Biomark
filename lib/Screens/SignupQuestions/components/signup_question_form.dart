@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../Login/login_screen.dart';
 import '../../../constants.dart';
 import '../../../components/already_have_an_account_acheck.dart';
+import '../../../util/hash_password.dart';
 
 class SignUpQuestionForm extends StatefulWidget {
   final String name;
@@ -59,10 +60,10 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
       final email = widget.email;
 
       // Hash the answers to the security questions
-      final hashedMotherMaidenName = hashData(_motherMaidenNameController.text);
-      final hashedBestFriendsName = hashData(_bestFriendsNameController.text);
-      final hashedChildhoodPetsName = hashData(_childhoodPetsNameController.text);
-      final hashedCustomQuestion = hashData(_customQuestionController.text);
+      final hashedMotherMaidenName = hashPassword(_motherMaidenNameController.text);
+      final hashedBestFriendsName = hashPassword(_bestFriendsNameController.text);
+      final hashedChildhoodPetsName = hashPassword(_childhoodPetsNameController.text);
+      final hashedCustomQuestion = hashPassword(_customQuestionController.text);
 
       try {
         // Save the data to Firebase
