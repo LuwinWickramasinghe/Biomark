@@ -45,8 +45,8 @@ Future<String> getCurrentUserEmail() async {
 
 
   // Method to save form data to Firebase
-  Future<void> saveFormData(Map<String, dynamic> formData) async {
-    await _fbHelper.saveFormToFirebase(formData);
+  Future<void> saveFormData(Map<String, dynamic> formData, bool changeEmail) async {
+    await _fbHelper.saveFormToFirebase(formData, changeEmail);
   }
 
   Future<Map<String, dynamic>?> getUserProfile() async {

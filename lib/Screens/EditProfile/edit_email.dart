@@ -41,7 +41,7 @@ class _EditProfileScreenState extends State<EditEmail> {
 
       try {
         // Attempt to save form data
-        await _userService.saveFormData(formData);
+        await _userService.saveFormData(formData, true);
         setState(() {
           isSubscribed = true;
         });

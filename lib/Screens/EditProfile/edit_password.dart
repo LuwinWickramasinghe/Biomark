@@ -3,6 +3,7 @@ import 'package:biomark/Screens/SubscriptionConfirm/subscribe_unsuccessful.dart'
 import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 import '../../service/UserService.dart';
+import '../../util/hash_password.dart';
 
 class EditPassword extends StatefulWidget {
   const EditPassword({super.key});
@@ -31,12 +32,12 @@ class _EditPasswordScreenState extends State<EditPassword> {
       // Collect form data
       Map<String, dynamic> formData = {
         'email': _passwordController.text,
-        'newPassword': _newPasswordController.text,
+        'newPassword': hashPassword(_newPasswordController.text),
       };
 
       try {
         // Attempt to save form data
-        await _userService.saveFormData(formData);
+        await _userService.saveFormData(formData, false);
         setState(() {
           isSubscribed = true;
         });

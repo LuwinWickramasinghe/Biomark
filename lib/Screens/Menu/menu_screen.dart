@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 // import '../SubscribeForm/subscribe_form.dart';
 // import 'package:biomark/Screens/EditProfile/edit_email.dart';
 // import 'package:biomark/Screens/EditProfile/edit_password.dart';
-import '../EditProfile/edit_profile.dart';
+import '../EditProfile/edit_email.dart';
+import '../EditProfile/edit_password.dart';
+import '../SubscribeForm/subscribe_form.dart';
 import '../AccountRecovery/account_recovery.dart';
 import '../../service/UserService.dart';
 
