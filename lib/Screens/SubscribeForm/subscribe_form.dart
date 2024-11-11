@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 import '../../service/UserService.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+class SubscribeForm extends StatefulWidget {
+  const SubscribeForm({super.key});
 
   @override
-  _EditProfileScreenState createState() => _EditProfileScreenState();
+  _SubscribeFormState createState() => _SubscribeFormState();
 }
 
-class _EditProfileScreenState extends State<EditProfileScreen> {
+class _SubscribeFormState extends State<SubscribeForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
