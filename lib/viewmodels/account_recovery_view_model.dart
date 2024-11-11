@@ -4,7 +4,6 @@ import 'package:biomark/models/account_recovery_model.dart';
 import 'package:biomark/repository/repository.dart';
 
 class AccountRecoveryViewModel extends ChangeNotifier {
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
   final List<TextEditingController> questionControllers =
@@ -48,17 +47,15 @@ class AccountRecoveryViewModel extends ChangeNotifier {
   }
 
   void updateFormValidity() {
-    isFormValid = emailController.text.isNotEmpty &&
-                  nameController.text.isNotEmpty &&
+    isFormValid = nameController.text.isNotEmpty &&
                   dobController.text.isNotEmpty &&
                   questionControllers.every((c) => c.text.isNotEmpty);
     notifyListeners();
   }
 
   Future<void> verifyAndProceed() async {
-    // Create a map for all key-value pairs
+    // Create a map for all key-value pairs without email
     final Map<String, String> recoveryData = {
-      "email": emailController.text,
       "name": nameController.text,
       "date_of_birth": dobController.text,
       getQuestionLabel(0): questionControllers[0].text,
@@ -74,7 +71,6 @@ class AccountRecoveryViewModel extends ChangeNotifier {
 
   @override
   void dispose() {
-    emailController.dispose();
     nameController.dispose();
     dobController.dispose();
     for (var controller in questionControllers) {

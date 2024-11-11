@@ -33,8 +33,8 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
 
   // Encrypt method for sensitive data (Name & Email)
   String encryptData(String data) {
-    final key = encrypt.Key.fromUtf8('16charSecretKey!'); // Exactly 16 characters for AES-128
-    final iv = encrypt.IV.fromLength(16); // Initialization vector (IV) should also be 16 bytes
+     final key = encrypt.Key.fromUtf8('1234567890123456'); // 16-byte key
+  final iv = encrypt.IV.fromUtf8('1234567890123456');  // Initialization vector (IV) should also be 16 bytes
     final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
     final encrypted = encrypter.encrypt(data, iv: iv);
     return encrypted.base64;

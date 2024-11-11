@@ -1,5 +1,8 @@
 import 'package:biomark/models/account_recovery_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../../../util/hash_password.dart';
+import 'package:biomark/util/encryption_func.dart';
+import 'package:biomark/util/string_helper.dart';
 
 class Repository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -13,28 +16,47 @@ class Repository {
     return isVerified;
   }
 
-  Future<bool> _verifyInFirebase(AccountRecoveryModel user) async {
-    try {
-      // Query Firestore for the user with matching details
-      final querySnapshot = await _firestore
-          .collection('users')
-          .where('email', isEqualTo: user.email) // Adjust based on your model
-          .get();
+ Future<bool> _verifyInFirebase(AccountRecoveryModel user) async {
+  try {
+    // Encrypt the name and dob as they are stored in Firestore
+    print(user);
+   String encryptedName = encryptData(user.recoveryData['name'] ?? '');
+   print(user.recoveryData['name']);
+ // Use your encryption function
+    String encryptedDob = encryptData(user.recoveryData['date_of_birth']?? ''); // Use your encryption function
+print('here');
+    // Hash the security question answers
+    String hashedAnswer1 = hashPassword(user.recoveryData[toCamelCase(user.recoveryData.keys.elementAt(2))]?? ''); // Replace index as needed
+    String hashedAnswer2 = hashPassword(user.recoveryData[toCamelCase(user.recoveryData.keys.elementAt(3))]?? ''); 
+    
+    print(hashedAnswer1);
+    print(toCamelCase(user.recoveryData.keys.elementAt(3)));
+    print(toCamelCase(user.recoveryData.keys.elementAt(2)));// Replace index as needed
 
- var doc = querySnapshot.docs.first;
- print(doc);
+    // Query Firestore with the encrypted name, encrypted dob, and hashed answers
+    final querySnapshot = await _firestore
+        .collection('users')
+        .where('name', isEqualTo: encryptedName)
+       // .where('dob', isEqualTo: encryptedDob)
+      //  .where(user.recoveryData.keys.elementAt(2), isEqualTo: hashedAnswer1)
+        .where(user.recoveryData.keys.elementAt(3), isEqualTo: hashedAnswer2)
+        .get();
 
-      if (querySnapshot.docs.isNotEmpty) {
-        // The user details match and are found in Firestore
-        return true;
-      } else {
-        // No matching user found
-        return false;
-      }
-    } catch (e) {
-      // Catch any errors during Firestore verification
-      print("Error during Firestore verification: $e");
+    if (querySnapshot.docs.isNotEmpty) {
+      // A document matching all fields was found
+      return true;
+    } else {
+      // No document matches all provided data
       return false;
     }
+  } catch (e) {
+    // Catch any errors during Firestore verification
+    print("Error during Firestore verification: $e");
+    return false;
   }
 }
+
+}
+
+
+

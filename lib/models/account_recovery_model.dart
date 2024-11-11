@@ -26,8 +26,8 @@ class SecurityQuestion {
 
   static List<SecurityQuestion> getAllQuestions() {
     return [
-      SecurityQuestion("Mother's Maiden Name", Icons.security),
-      SecurityQuestion("Childhood Best Friend's Name", Icons.people),
+      SecurityQuestion("Mother Maiden Name", Icons.security),
+      SecurityQuestion("Best Friend's Name", Icons.people),
       SecurityQuestion("Childhood Pet's Name", Icons.pets),
       SecurityQuestion("Custom Question", Icons.question_mark),
     ];
