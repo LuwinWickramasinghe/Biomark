@@ -140,7 +140,7 @@ class DatabaseHelper {
     await db.delete('users'); // Deletes all rows from 'users' table
 
     // Optionally, clear any other specific cache table
-    await db.delete('cached_user'); // Deletes all rows from 'cached_user' table
+    //await db.delete('cached_user'); // Deletes all rows from 'cached_user' table
 
     print("Cache cleared successfully");
   } catch (e) {

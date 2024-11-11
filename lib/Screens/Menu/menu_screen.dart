@@ -1,6 +1,9 @@
+// lib/screens/menu_screen.dart
+
 import 'package:biomark/Screens/EditProfile/edit_email.dart';
 import 'package:biomark/Screens/EditProfile/edit_password.dart';
 import 'package:flutter/material.dart';
+import 'package:biomark/components/logout_component.dart'; // Import the LogoutComponent
 import '../SubscribeForm/subscribe_form.dart';
 import '../AccountRecovery/account_recovery.dart';
 import '../../service/UserService.dart';
@@ -14,7 +17,7 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final UserService _userService = UserService();
-  bool isSubscribed = false;
+  bool? isSubscribed = false;
 
   @override
   void initState() {
@@ -26,12 +29,11 @@ class _MenuScreenState extends State<MenuScreen> {
     final userProfile = await _userService.getUserProfile();
     if (userProfile != null && userProfile.containsKey('isSubscribed')) {
       setState(() {
-        //isSubscribed = userProfile['isSubscribed'] as bool;
-        isSubscribed = true;
+        isSubscribed = userProfile['isSubscribed'] as bool?;
       });
     } else {
       setState(() {
-        isSubscribed = true; // Default if not found
+        isSubscribed = false; // Default if not found
       });
     }
   }
@@ -42,12 +44,7 @@ class _MenuScreenState extends State<MenuScreen> {
       appBar: AppBar(
         title: const Text('Biomark Profile'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              // Handle logout functionality
-            },
-          ),
+          LogoutComponent(), // Use the LogoutComponent here
         ],
       ),
       body: Padding(
@@ -72,7 +69,7 @@ class _MenuScreenState extends State<MenuScreen> {
             const SizedBox(height: 20),
 
             // Personal Info Section
-            if(isSubscribed)...[
+            if (isSubscribed != null && isSubscribed!) ...[
               const Text(
                 'Personal Information',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -111,57 +108,54 @@ class _MenuScreenState extends State<MenuScreen> {
                     : isSubscribed! ? 'Subscribed' : 'Not Subscribed',
               ),
             ),
-
             const SizedBox(height: 20),
 
             // Action Section
-            
-              Center(
-                
-                child: Column(
-                  children: [
-                    if(isSubscribed)...[
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditEmail(),
-                              ),
-                            );
-                          },
-                          child: Text("Edit Email".toUpperCase()),
-                        ),
-
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const EditPassword(),
-                              ),
-                            );
-                          },
-                          child: Text("Change Password".toUpperCase()),
-                        ),
-                    ],
-                    if(!isSubscribed)
-                      ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubscribeForm(),
-                                ),
-                              );
-                            },
-                            child: Text("Subscribe".toUpperCase()),
+            Center(
+              child: Column(
+                children: [
+                  if (isSubscribed != null && isSubscribed!) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditEmail(),
                           ),
-                          const SizedBox(height: 10),
+                        );
+                      },
+                      child: Text("Edit Email".toUpperCase()),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditPassword(),
+                          ),
+                        );
+                      },
+                      child: Text("Change Password".toUpperCase()),
+                    ),
                   ],
-                ),
+                  if (isSubscribed == null || !isSubscribed!) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SubscribeForm(),
+                          ),
+                        );
+                      },
+                      child: Text("Subscribe".toUpperCase()),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+                ],
               ),
+            ),
           ],
         ),
       ),
