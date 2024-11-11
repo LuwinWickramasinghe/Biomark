@@ -1,3 +1,4 @@
+import 'package:biomark/util/encryption_func.dart';
 import 'package:biomark/util/firebase_helper.dart';
 import 'package:biomark/util/database_helper.dart';
 import 'package:biomark/util/hash_password.dart';
@@ -14,6 +15,7 @@ class UserService {
     String? password = await _dbHelper.getPasswordByEmail(email);
 
     if (password == null) {
+       print('here3');
       // If password is not cached, fetch user details from Firebase and cache them
       Map<String, dynamic>? user = await _fbHelper.getUserFromFirebase(email);
       if (user == null) return false;
@@ -32,56 +34,51 @@ class UserService {
 Future<String> getCurrentUserEmail() async {
   // Attempt to get the email from the local cache (email is guaranteed to be available)
   String email = await _dbHelper.getCachedEmail();
-
-  if (email.isEmpty) {
-    Map<String, dynamic>? user = await _fbHelper.getUserFromFirebase(email);
-    email = user?['email'] ?? '';
-    if (email.isNotEmpty) {
-      await _dbHelper.cacheEmail(email);
-    }
-  }
   return email;
 }
 
 Future<String> getCurrentUserName() async {
   // Attempt to get the email from the local cache (email is guaranteed to be available)
   String name = await _dbHelper.getCachedName();
-
-  if (name.isEmpty) {
-    Map<String, dynamic>? user = await _fbHelper.getUserFromFirebase(name);
-    name = user?['name'] ?? '';
-    if (name.isNotEmpty) {
-      await _dbHelper.cacheEmail(name);
-    }
-  }
-  return name;
+  return decryptData(name);
 }
 
 
   // Method to save form data to Firebase
-  Future<void> saveFormData(Map<String, dynamic> formData, bool changeEmail) async {
-    await _fbHelper.saveFormToFirebase(formData, changeEmail);
+  Future<void> saveFormData(Map<String, dynamic> formData) async {
+    await _fbHelper.saveFormToFirebase(formData);
   }
 
   Future<void> updateEmail(Map<String, dynamic> formData) async {
     await _fbHelper.saveEmailToFirebase(formData);
     await updateLocalEmail(formData['oldemail'], formData['email']);
   }
+   Future<void> updatePassword(Map<String, dynamic> formData) async {
+    await _fbHelper.saveEmailToFirebase(formData);
+    await updateLocalEmail(formData['oldemail'], formData['email']);
+  }
 
   Future<void> updateLocalEmail(String oldEmail, String newEmail) async {
-  final db = _dbHelper;
+  final db = await _dbHelper.database;
   try {
-    // Delete the old email
-    await db.deleteEmail(oldEmail);
+    // Update the email of the first record matching the old email
+    int count = await db.update(
+      'users',
+      {'email': newEmail}, // New email to update
+      where: 'email = ?',
+      whereArgs: [oldEmail], // Old email to match
+    );
 
-    // Insert the new email
-    await db.insertEmail(newEmail);
-
-    print("Email updated successfully");
+    if (count > 0) {
+      print("Email updated successfully");
+    } else {
+      print("No matching record found for the email");
+    }
   } catch (e) {
     print("Error updating email: $e");
   }
 }
+
 
 
 Future<Map<String, dynamic>?> getUserProfile(String email) async {

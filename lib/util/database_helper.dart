@@ -14,23 +14,33 @@ class DatabaseHelper {
     return _database!;
   }
 
+  Future<void> deleteDatabaseFile() async {
+    String path = join(await getDatabasesPath(), 'app_database.db');
+    await deleteDatabase(path); // Deletes the existing database
+  }
+
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'app_database.db');
     return await openDatabase(
       path,
+      version: 2, // Increment the version to trigger `onUpgrade`
       onCreate: (db, version) {
         db.execute(
           '''
           CREATE TABLE users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             email TEXT NOT NULL,
-            name TEXT,
-            password TEXT NOT NULL
+            password TEXT NOT NULL,
+            name TEXT
           )
           ''',
         );
       },
-      version: 1,
+      onUpgrade: (db, oldVersion, newVersion) {
+        if (oldVersion < 2) {
+          db.execute('ALTER TABLE users ADD COLUMN name TEXT');
+        }
+      },
     );
   }
 
@@ -39,16 +49,17 @@ class DatabaseHelper {
     final db = await database;
     await db.insert(
       'users',
-      {'email': email},
+      {'email': email, 'password': '', 'name': ''},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-    Future<void> cacheName(String name) async {
+  // Method to cache user name
+  Future<void> cacheName(String name) async {
     final db = await database;
     await db.insert(
       'users',
-      {'name': name},
+      {'name': name, 'email': '', 'password': ''},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -64,7 +75,8 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first['email'] as String : '';
   }
 
-    Future<String> getCachedName() async {
+  // Method to retrieve the cached name
+  Future<String> getCachedName() async {
     final db = await database;
     final result = await db.query(
       'users',
@@ -74,44 +86,42 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first['name'] as String : '';
   }
 
-
   // Method to cache user data
   Future<void> cacheUser(Map<String, dynamic>? userData) async {
-    try {
-      if (userData != null) {
-        final db = await database;
+    if (userData == null) {
+      print("User data is null.");
+      return;
+    }
 
-        // Check if the user already exists in the local database
-        List<Map<String, dynamic>> existingUser = await db.query(
+    try {
+      final db = await database;
+
+      // Check if the user already exists in the local database
+      List<Map<String, dynamic>> existingUser = await db.query(
+        'users',
+        where: 'email = ?',
+        whereArgs: [userData['email']],
+      );
+
+      if (existingUser.isEmpty) {
+        // Insert the new user data if user doesn't exist
+        await db.insert(
           'users',
+          {
+            'email': userData['email'],
+            'name': userData['name'],
+            'password': userData['password'],
+          },
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
+      } else {
+        // Update the user record if password changes
+        await db.update(
+          'users',
+          {'password': userData['password']},
           where: 'email = ?',
           whereArgs: [userData['email']],
         );
-
-        if (existingUser.isEmpty) {
-          // Insert the new user data if user doesn't exist
-          await db.insert(
-            'users',
-            {
-              'email': userData['email'],
-              'name': userData['name'],
-              'password': userData['password'],
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace,
-          );
-        } else {
-          // Update the user record if password changes
-          await db.update(
-            'users',
-            {
-              'password': userData['password'],
-            },
-            where: 'email = ?',
-            whereArgs: [userData['email']],
-          );
-        }
-      } else {
-        print("User not found in Firebase.");
       }
     } catch (e) {
       print("Error caching user: $e");
@@ -141,24 +151,18 @@ class DatabaseHelper {
     return result.isNotEmpty ? result.first['password'] as String? : null;
   }
 
+  // Method to clear all user data cache
   Future<void> clearCache() async {
-  final db = await database;
-
-  try {
-    // Clear all records from the users table (or specific data as required)
-    await db.delete('users'); // Deletes all rows from 'users' table
-
-    // Optionally, clear any other specific cache table
-    //await db.delete('cached_user'); // Deletes all rows from 'cached_user' table
-
-    print("Cache cleared successfully");
-  } catch (e) {
-    print("Error clearing cache: $e");
+    final db = await database;
+    try {
+      await db.delete('users'); // Deletes all rows from 'users' table
+      print("Cache cleared successfully");
+    } catch (e) {
+      print("Error clearing cache: $e");
+    }
   }
-}
 
-
-  // Add the deleteEmail method to delete based on old email
+  // Delete a specific user by email
   Future<void> deleteEmail(String oldEmail) async {
     final db = await database;
     await db.delete(
@@ -168,12 +172,12 @@ class DatabaseHelper {
     );
   }
 
-  // Add the insertEmail method to insert a new email
+  // Insert a new email
   Future<void> insertEmail(String newEmail) async {
     final db = await database;
     await db.insert(
       'users',
-      {'email': newEmail},
+      {'email': newEmail, 'password': '', 'name': ''},
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }

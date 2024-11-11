@@ -36,7 +36,7 @@ class _EditPasswordScreenState extends State<EditPassword> {
       };
 
       try {
-        await _userService.saveFormData(formData, false);
+        await _userService.updatePassword(formData);
         setState(() {
           isSubscribed = true;
         });

@@ -38,6 +38,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
     String? email = await _userService.getCurrentUserEmail();
     _emailController.text = email;
     String? name = await _userService.getCurrentUserName();
+    _nameController.text = name;
 
 
 
@@ -65,7 +66,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
 
       try {
         // Attempt to save form data
-        // await _userService.saveFormData(formData);
+         await _userService.saveFormData(formData);
         setState(() {
           isSubscribed = true;
         });
