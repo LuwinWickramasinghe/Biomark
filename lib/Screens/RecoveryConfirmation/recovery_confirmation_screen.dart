@@ -29,9 +29,10 @@ void _resetPassword() async {
     });
 
     if (_isSuccessful) {
+      print(_passwordController.text);
       // Call FirebaseHelper to update password in Firestore
-      String result = await _repository.updatePassword(widget.userEmail, hashPassword(_passwordController.text));
-
+      String result = await _repository.updatePassword(widget.userEmail, _passwordController.text);
+ print(result);
       if (result == 'Password updated successfully') {
         // Navigate to the successful screen
         Navigator.pushReplacement(

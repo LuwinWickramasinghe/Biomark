@@ -113,7 +113,7 @@ Future<String> updatePassword(String email, String newPassword) async {
         .collection('users')
         .doc(documentId) // Use the document ID
         .update({
-          'password': newPassword, // Update the password field
+          'password': hashPassword(newPassword), // Update the password field
         });
 
     return 'Password updated successfully';

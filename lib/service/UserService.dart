@@ -12,6 +12,7 @@ class UserService {
 
   // Method to validate the user
   Future<bool> validateUser(String email, String enteredPassword) async {
+    print('here');
     // Fetch the stored hashed password from the SQLite database based on the email
     String? password = await _dbHelper.getPasswordByEmail(email);
 
@@ -22,6 +23,9 @@ class UserService {
       _dbHelper.cacheUser(user);
       password = user['password'];
     }
+    print('here');
+    print(password);
+    print(hashPassword(enteredPassword));
 
     // Compare the hashed entered password with the stored hashed password
     return hashPassword(enteredPassword) == password;
