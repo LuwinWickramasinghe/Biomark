@@ -4,16 +4,13 @@ import 'package:biomark/util/hash_password.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-
 class UserService {
   static final _dbHelper = DatabaseHelper.instance;
   static final _fbHelper = FirebaseHelper.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Method to validate the user
   Future<bool> validateUser(String email, String enteredPassword) async {
-    print('here');
-    // Fetch the stored hashed password from the SQLite database based on the email
+
     String? password = await _dbHelper.getPasswordByEmail(email);
 
     if (password == null) {
@@ -35,8 +32,6 @@ class UserService {
 Future<String> getCurrentUserEmail() async {
   // Attempt to get the email from the local cache (email is guaranteed to be available)
   String email = await _dbHelper.getCachedEmail();
-  print('caaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaached email');
-  print(email);
 
   if (email.isEmpty) {
     Map<String, dynamic>? user = await _fbHelper.getUserFromFirebase(email);
