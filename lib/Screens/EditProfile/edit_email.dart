@@ -17,7 +17,7 @@ class _EditProfileScreenState extends State<EditEmail> {
   final TextEditingController _newEmailController = TextEditingController();
 
   late final UserService _userService;
-  bool isSubscribed = false;
+  bool isSubmitted = false;
 
   @override
   void initState() {
@@ -35,15 +35,15 @@ class _EditProfileScreenState extends State<EditEmail> {
     if (_formKey.currentState!.validate()) {
       // Collect form data
       Map<String, dynamic> formData = {
-        'email': _emailController.text,
-        'newemail': _newEmailController.text,
+        'oldemail': _emailController.text,
+        'email': _newEmailController.text,
       };
 
       try {
         // Attempt to save form data
-        await _userService.saveFormData(formData);
+        await _userService.updateEmail(formData);
         setState(() {
-          isSubscribed = true;
+          isSubmitted = true;
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -52,7 +52,7 @@ class _EditProfileScreenState extends State<EditEmail> {
       } catch (e) {
         // Handle failure, set isSubscribed to false
         setState(() {
-          isSubscribed = false;
+          isSubmitted = false;
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -61,7 +61,7 @@ class _EditProfileScreenState extends State<EditEmail> {
       }
     }
 
-    if (isSubscribed) {
+    if (isSubmitted) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const SubscribeSuccessfulScreen()),
