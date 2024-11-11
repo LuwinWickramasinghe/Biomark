@@ -1,10 +1,12 @@
 import 'package:encrypt/encrypt.dart' as encrypt;
-import 'package:bcrypt/bcrypt.dart';
+import 'package:crypto/crypto.dart';
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../Login/login_screen.dart';
 import '../../../constants.dart';
 import '../../../components/already_have_an_account_acheck.dart';
+import '../../../util/hash_password.dart';
 
 class SignUpQuestionForm extends StatefulWidget {
   final String name;
@@ -32,36 +34,42 @@ class _SignUpQuestionFormState extends State<SignUpQuestionForm> {
 
   // Encrypt method for sensitive data (Name & Email)
   String encryptData(String data) {
-    final key = encrypt.Key.fromUtf8('16charSecretKey!'); // Exactly 16 characters for AES-128
-    final iv = encrypt.IV.fromLength(16); // Initialization vector (IV) should also be 16 bytes
+     final key = encrypt.Key.fromUtf8('1234567890123456'); // 16-byte key
+  final iv = encrypt.IV.fromUtf8('1234567890123456');  // Initialization vector (IV) should also be 16 bytes
     final encrypter = encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
     final encrypted = encrypter.encrypt(data, iv: iv);
     return encrypted.base64;
   }
 
   // Hash method for password and security questions
-  String hashData(String data) {
-    return BCrypt.hashpw(data, BCrypt.gensalt());
-  }
+  String hashData(String password) {
+  // Convert the password into bytes
+  var bytes = utf8.encode(password);
+
+  // Perform SHA256 hashing
+  var digest = sha256.convert(bytes);
+
+  return digest.toString(); // Return the hashed password
+}
 
   // Submit the form and save data to Firebase
   Future<void> submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       final hashedPassword = hashData(widget.password);
       final encryptedName = encryptData(widget.name);
-      final encryptedEmail = encryptData(widget.email);
+      final email = widget.email;
 
       // Hash the answers to the security questions
-      final hashedMotherMaidenName = hashData(_motherMaidenNameController.text);
-      final hashedBestFriendsName = hashData(_bestFriendsNameController.text);
-      final hashedChildhoodPetsName = hashData(_childhoodPetsNameController.text);
-      final hashedCustomQuestion = hashData(_customQuestionController.text);
+      final hashedMotherMaidenName = hashPassword(_motherMaidenNameController.text);
+      final hashedBestFriendsName = hashPassword(_bestFriendsNameController.text);
+      final hashedChildhoodPetsName = hashPassword(_childhoodPetsNameController.text);
+      final hashedCustomQuestion = hashPassword(_customQuestionController.text);
 
       try {
         // Save the data to Firebase
         await FirebaseFirestore.instance.collection('users').add({
           'name': encryptedName,
-          'email': encryptedEmail,
+          'email': email,
           'password': hashedPassword,
           'motherMaidenName': hashedMotherMaidenName,
           'bestFriendsName': hashedBestFriendsName,
