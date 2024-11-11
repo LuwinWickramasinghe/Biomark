@@ -1,3 +1,5 @@
+// lib/screens/menu_screen.dart
+
 import 'package:biomark/Screens/EditProfile/edit_email.dart';
 import 'package:biomark/Screens/EditProfile/edit_password.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +16,13 @@ class MenuScreen extends StatefulWidget {
 
 class _MenuScreenState extends State<MenuScreen> {
   final UserService _userService = UserService();
+<<<<<<< HEAD
   bool isSubscribed = false;
   
 
+=======
+  bool? isSubscribed = false;
+>>>>>>> 04a451ace3d8c178777fae2a898d1a1baf46eff1
 
   @override
   void initState() {
@@ -35,10 +41,14 @@ class _MenuScreenState extends State<MenuScreen> {
     print(userProfile);
     if (userProfile != null && userProfile.containsKey('isSubscribed')) {
       setState(() {
+<<<<<<< HEAD
         isSubscribed = userProfile['isSubscribed'] as bool;
         print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
         print(isSubscribed);
       
+=======
+        isSubscribed = userProfile['isSubscribed'] as bool?;
+>>>>>>> 04a451ace3d8c178777fae2a898d1a1baf46eff1
       });
     } else {
       setState(() {
@@ -117,58 +127,54 @@ class _MenuScreenState extends State<MenuScreen> {
                     : isSubscribed! ? 'Subscribed' : 'Not Subscribed',
               ),
             ),
-
             const SizedBox(height: 20),
 
             // Action Section
-            
-              Center(
-                
-                child: Column(
-                  children: [
+            Center(
+              child: Column(
+                children: [
                   if (isSubscribed != null && isSubscribed!) ...[
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditEmail(),
-                              ),
-                            );
-                          },
-                          child: Text("Edit Email".toUpperCase()),
-                        ),
-
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const EditPassword(),
-                              ),
-                            );
-                          },
-                          child: Text("Change Password".toUpperCase()),
-                        ),
-                    ],
-                  if (isSubscribed == null || !isSubscribed!) ...[
-                      ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SubscribeForm(),
-                                ),
-                              );
-                            },
-                            child: Text("Subscribe".toUpperCase()),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditEmail(),
                           ),
-                          const SizedBox(height: 10),
+                        );
+                      },
+                      child: Text("Edit Email".toUpperCase()),
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditPassword(),
+                          ),
+                        );
+                      },
+                      child: Text("Change Password".toUpperCase()),
+                    ),
+                  ],
+                  if (isSubscribed == null || !isSubscribed!) ...[
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SubscribeForm(),
+                          ),
+                        );
+                      },
+                      child: Text("Subscribe".toUpperCase()),
+                    ),
+                    const SizedBox(height: 10),
                   ],
                 ],
-                ),
               ),
+            ),
           ],
         ),
       ),
