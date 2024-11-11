@@ -4,6 +4,7 @@ class FirebaseHelper {
 
   // Singleton instance of FirebaseHelper
   static final FirebaseHelper instance = FirebaseHelper._privateConstructor();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Private constructor to avoid external instantiation
   FirebaseHelper._privateConstructor();
@@ -28,5 +29,14 @@ class FirebaseHelper {
     return null; // Return null on error
   }
 }
+// Method to save form data to Firebase Firestore
+  Future<void> saveFormToFirebase(Map<String, dynamic> formData) async {
+    try {
+      // Assuming each form submission is a new document in a 'form_submissions' collection
+      await _firestore.collection('form_submissions').add(formData);
+    } catch (e) {
+      print("Error saving form data to Firebase: $e");
+    }
+  }
 
 }
