@@ -30,10 +30,11 @@ class FirebaseHelper {
   }
 }
 // Method to save form data to Firebase Firestore
-  Future<void> saveFormToFirebase(Map<String, dynamic> formData) async {
+  Future<void> saveFormToFirebase(Map<String, dynamic> formData, bool changeEmail) async {
     try {
       // Assuming each form submission is a new document in a 'form_submissions' collection
-      await _firestore.collection('subscription').add(formData);
+      if(changeEmail) await _firestore.collection('subscription').add(formData);
+      await _firestore.collection('users').add(formData);
     } catch (e) {
       print("Error saving form data to Firebase: $e");
     }

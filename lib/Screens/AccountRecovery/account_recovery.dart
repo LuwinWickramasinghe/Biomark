@@ -26,82 +26,120 @@ class AccountRecoveryScreen extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // Full Name Field
-              TextFormField(
-                controller: viewModel.nameController,
-                decoration: InputDecoration(
-                  labelText: "Full Name",
-                  prefixIcon: const Icon(Icons.person),
-                  errorText: viewModel.nameError,
+              // Single Card for all fields with custom color
+              Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                onChanged: (_) => viewModel.updateFormValidity(),
-              ),
-              const SizedBox(height: 20),
+                elevation: 4,
+                color: const Color.fromARGB(
+                    255, 42, 162, 242), // Change card color here
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Full Name Field
+                      TextFormField(
+                        controller: viewModel.nameController,
+                        decoration: InputDecoration(
+                          labelText: "Full Name",
+                          labelStyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // Dark and bold label
+                          ),
+                          prefixIcon: const Icon(Icons.person),
+                          errorText: viewModel.nameError,
+                        ),
+                        onChanged: (_) => viewModel.updateFormValidity(),
+                      ),
+                      const SizedBox(height: 20),
 
-              // Date of Birth Field with Date Picker
-              TextFormField(
-                controller: viewModel.dobController,
-                decoration: InputDecoration(
-                  labelText: "Date of Birth",
-                  prefixIcon: const Icon(Icons.calendar_today),
-                  errorText: viewModel.dobError,
-                ),
-                readOnly: true,
-                onTap: () async {
-                  final DateTime selectedDate = await showDatePicker(
-                    context: context,
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1900),
-                    lastDate: DateTime.now(),
-                  ) ?? DateTime.now();
-                  viewModel.dobController.text =
-                      "${selectedDate.toLocal()}".split(' ')[0];
-                  viewModel.updateFormValidity();
-                },
-              ),
-              const SizedBox(height: 20),
+                      // Date of Birth Field with Date Picker
+                      TextFormField(
+                        controller: viewModel.dobController,
+                        decoration: InputDecoration(
+                          labelText: "Date of Birth",
+                          labelStyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // Dark and bold label
+                          ),
+                          prefixIcon: const Icon(Icons.calendar_today),
+                          errorText: viewModel.dobError,
+                        ),
+                        readOnly: true,
+                        onTap: () async {
+                          final DateTime selectedDate = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime.now(),
+                              ) ??
+                              DateTime.now();
+                          viewModel.dobController.text =
+                              "${selectedDate.toLocal()}".split(' ')[0];
+                          viewModel.updateFormValidity();
+                        },
+                      ),
+                      const SizedBox(height: 20),
 
-              // First Security Question
-              TextFormField(
-                controller: viewModel.questionControllers[0],
-                decoration: InputDecoration(
-                  labelText: viewModel.getQuestionLabel(0),
-                  prefixIcon: Icon(viewModel.getQuestionIcon(0)),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () => viewModel.replaceQuestion(0),
+                      // First Security Question
+                      TextFormField(
+                        controller: viewModel.questionControllers[0],
+                        decoration: InputDecoration(
+                          labelText: viewModel.getQuestionLabel(0),
+                          labelStyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // Dark and bold label
+                          ),
+                          prefixIcon: Icon(viewModel.getQuestionIcon(0)),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () => viewModel.replaceQuestion(0),
+                          ),
+                          errorText: viewModel.questionErrors[0],
+                        ),
+                        onChanged: (_) => viewModel.updateFormValidity(),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Second Security Question
+                      TextFormField(
+                        controller: viewModel.questionControllers[1],
+                        decoration: InputDecoration(
+                          labelText: viewModel.getQuestionLabel(1),
+                          labelStyle: const TextStyle(
+                            fontFamily: 'Montserrat',
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // Dark and bold label
+                          ),
+                          prefixIcon: Icon(viewModel.getQuestionIcon(1)),
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.refresh),
+                            onPressed: () => viewModel.replaceQuestion(1),
+                          ),
+                          errorText: viewModel.questionErrors[1],
+                        ),
+                        onChanged: (_) => viewModel.updateFormValidity(),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Display error message for the overall verification status
+                      if (viewModel.verificationError != null)
+                        Center(
+                          child: Text(
+                            viewModel.verificationError!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        ),
+                      const SizedBox(height: 20),
+                    ],
                   ),
-                  errorText: viewModel.questionErrors[0],
                 ),
-                onChanged: (_) => viewModel.updateFormValidity(),
               ),
-              const SizedBox(height: 20),
-
-              // Second Security Question
-              TextFormField(
-                controller: viewModel.questionControllers[1],
-                decoration: InputDecoration(
-                  labelText: viewModel.getQuestionLabel(1),
-                  prefixIcon: Icon(viewModel.getQuestionIcon(1)),
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () => viewModel.replaceQuestion(1),
-                  ),
-                  errorText: viewModel.questionErrors[1],
-                ),
-                onChanged: (_) => viewModel.updateFormValidity(),
-              ),
-              const SizedBox(height: 20),
-
-              // Display error message for the overall verification status
-              if (viewModel.verificationError != null)
-                Center(
-                  child: Text(
-                    viewModel.verificationError!,
-                    style: const TextStyle(color: Colors.red),
-                  ),
-                ),
-              const SizedBox(height: 20),
 
               // Next Button
               Center(

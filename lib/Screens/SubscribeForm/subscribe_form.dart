@@ -65,7 +65,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
 
       try {
         // Attempt to save form data
-        await _userService.saveFormData(formData);
+        // await _userService.saveFormData(formData);
         setState(() {
           isSubscribed = true;
         });

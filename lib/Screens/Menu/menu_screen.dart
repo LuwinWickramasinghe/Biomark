@@ -24,9 +24,7 @@ class _MenuScreenState extends State<MenuScreen> {
   String? bloodGroup;
   String? height;
 
-  bool isDataLoaded = false; 
-
-
+  bool isDataLoaded = false;
 
   @override
   void initState() {
@@ -38,14 +36,12 @@ class _MenuScreenState extends State<MenuScreen> {
     if (isDataLoaded) return;
 
     String? email = await _userService.getCurrentUserEmail();
-    
+
     final userProfile = await _userService.getUserProfile(email);
 
     if (userProfile != null && userProfile.containsKey('isSubscribed')) {
       setState(() {
-
         isSubscribed = userProfile['isSubscribed'] as bool;
-
 
         fullName = userProfile['fullName'] as String?;
         dob = userProfile['dob'] as String?;
@@ -53,8 +49,6 @@ class _MenuScreenState extends State<MenuScreen> {
         bloodGroup = userProfile['bloodGroup'] as String?;
         height = userProfile['height'] as String?;
         isDataLoaded = true;
-
-
       });
     } else {
       setState(() {
@@ -65,144 +59,147 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text('Biomark Profile'),
-      actions: [
-        LogoutComponent(), // Use the LogoutComponent here
-      ],
-    ),
-    body: FutureBuilder<void>(
-      future: _fetchSubscriptionStatus(), // Execute the function
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          // Show a loading indicator while waiting
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          // Handle any errors during fetching
-          return Center(
-            child: Text('Error loading data: ${snapshot.error}'),
-          );
-        } else {
-          // Build the UI with the fetched data
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Profile Header Section
-                Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        'Welcome! ${fullName ?? ''}',
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Biomark Profile'),
+        actions: [
+          LogoutComponent(), // Use the LogoutComponent here
+        ],
+      ),
+      body: FutureBuilder<void>(
+        future: _fetchSubscriptionStatus(), // Execute the function
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // Show a loading indicator while waiting
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (snapshot.hasError) {
+            // Handle any errors during fetching
+            return Center(
+              child: Text('Error loading data: ${snapshot.error}'),
+            );
+          } else {
+            // Build the UI with the fetched data
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Profile Header Section
+                  Center(
+                    child: Column(
+                      children: [
+                        Text(
+                          'Welcome! ${fullName ?? ''}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
+                  const SizedBox(height: 20),
 
-                // Personal Info Section
-                if (isSubscribed != null && isSubscribed!) ...[
-                  const Text(
-                    'Personal Information',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const Divider(),
+                  // Personal Info Section
+                  if (isSubscribed != null && isSubscribed!) ...[
+                    const Text(
+                      'Personal Information',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const Divider(),
+                    ListTile(
+                      leading: const Icon(Icons.calendar_today),
+                      title: const Text('Date of Birth'),
+                      subtitle: Text(dob ?? '[User Date of Birth]'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.location_on),
+                      title: const Text('Location of Birth'),
+                      subtitle: Text(location ?? '[User Location]'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.bloodtype),
+                      title: const Text('Blood Group'),
+                      subtitle: Text(bloodGroup ?? '[User Blood Group]'),
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.height),
+                      title: const Text('Height'),
+                      subtitle: Text(height ?? '[User Height]'),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
+
+                  // Subscription Status Section
                   ListTile(
-                    leading: const Icon(Icons.calendar_today),
-                    title: const Text('Date of Birth'),
-                    subtitle: Text(dob ?? '[User Date of Birth]'),
+                    leading: const Icon(Icons.subscriptions),
+                    title: const Text('Subscription Status'),
+                    subtitle: Text(
+                      isSubscribed == null
+                          ? 'Loading...'
+                          : isSubscribed!
+                              ? 'Subscribed'
+                              : 'Not Subscribed',
+                    ),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.location_on),
-                    title: const Text('Location of Birth'),
-                    subtitle: Text(location ?? '[User Location]'),
+                  const SizedBox(height: 20),
+
+                  // Action Section
+                  Center(
+                    child: Column(
+                      children: [
+                        if (isSubscribed != null && isSubscribed!) ...[
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => EditEmail(),
+                                ),
+                              );
+                            },
+                            child: Text("Edit Email".toUpperCase()),
+                          ),
+                          const SizedBox(height: 10),
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const EditPassword(),
+                                ),
+                              );
+                            },
+                            child: Text("Change Password".toUpperCase()),
+                          ),
+                        ],
+                        if (isSubscribed == null || !isSubscribed!) ...[
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SubscribeForm(),
+                                ),
+                              );
+                            },
+                            child: Text("Subscribe".toUpperCase()),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ],
+                    ),
                   ),
-                  ListTile(
-                    leading: const Icon(Icons.bloodtype),
-                    title: const Text('Blood Group'),
-                    subtitle: Text(bloodGroup ?? '[User Blood Group]'),
-                  ),
-                  ListTile(
-                    leading: const Icon(Icons.height),
-                    title: const Text('Height'),
-                    subtitle: Text(height ?? '[User Height]'),
-                  ),
-                  const SizedBox(height: 10),
                 ],
-
-                // Subscription Status Section
-                ListTile(
-                  leading: const Icon(Icons.subscriptions),
-                  title: const Text('Subscription Status'),
-                  subtitle: Text(
-                    isSubscribed == null
-                        ? 'Loading...'
-                        : isSubscribed! ? 'Subscribed' : 'Not Subscribed',
-                  ),
-                ),
-                const SizedBox(height: 20),
-
-                // Action Section
-                Center(
-                  child: Column(
-                    children: [
-                      if (isSubscribed != null && isSubscribed!) ...[
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => EditEmail(),
-                              ),
-                            );
-                          },
-                          child: Text("Edit Email".toUpperCase()),
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const EditPassword(),
-                              ),
-                            );
-                          },
-                          child: Text("Change Password".toUpperCase()),
-                        ),
-                      ],
-                      if (isSubscribed == null || !isSubscribed!) ...[
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SubscribeForm(),
-                              ),
-                            );
-                          },
-                          child: Text("Subscribe".toUpperCase()),
-                        ),
-                        const SizedBox(height: 10),
-                      ],
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          );
-        }
-      },
-    ),
-  );
-}
+              ),
+            );
+          }
+        },
+      ),
+    );
+  }
 }

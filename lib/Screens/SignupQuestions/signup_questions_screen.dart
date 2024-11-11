@@ -23,10 +23,11 @@ class SignUpQuestionScreen extends StatelessWidget {
     return Background(
       child: SingleChildScrollView(
         child: Responsive(
-          mobile: MobileSignupQuestionScreen(name: name, email: email, password: password),
+          mobile: MobileSignupQuestionScreen(
+              name: name, email: email, password: password),
           desktop: Row(
             children: [
-              Expanded(
+              const Expanded(
                 child: SignUpScreenTopImage(),
               ),
               Expanded(
@@ -35,9 +36,10 @@ class SignUpQuestionScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: 450,
-                      child: SignUpQuestionForm(name: name, email: email, password: password),
+                      child: SignUpQuestionForm(
+                          name: name, email: email, password: password),
                     ),
-                    SizedBox(height: defaultPadding / 2),
+                    const SizedBox(height: defaultPadding / 2),
                   ],
                 ),
               )
@@ -68,12 +70,13 @@ class MobileSignupQuestionScreen extends StatelessWidget {
       children: <Widget>[
         Row(
           children: [
-            Spacer(),
+            const Spacer(),
             Expanded(
               flex: 8,
-              child: SignUpQuestionForm(name: name, email: email, password: password),
+              child: SignUpQuestionForm(
+                  name: name, email: email, password: password),
             ),
-            Spacer(),
+            const Spacer(),
           ],
         ),
       ],
