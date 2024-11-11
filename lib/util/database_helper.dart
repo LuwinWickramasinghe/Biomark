@@ -156,4 +156,25 @@ class DatabaseHelper {
     print("Error clearing cache: $e");
   }
 }
+
+
+  // Add the deleteEmail method to delete based on old email
+  Future<void> deleteEmail(String oldEmail) async {
+    final db = await database;
+    await db.delete(
+      'users',
+      where: 'email = ?',
+      whereArgs: [oldEmail],
+    );
+  }
+
+  // Add the insertEmail method to insert a new email
+  Future<void> insertEmail(String newEmail) async {
+    final db = await database;
+    await db.insert(
+      'users',
+      {'email': newEmail},
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
 }
