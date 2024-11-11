@@ -1,6 +1,7 @@
 import 'package:biomark/Screens/EditProfile/edit_email.dart';
 import 'package:biomark/Screens/EditProfile/edit_password.dart';
 import 'package:flutter/material.dart';
+import 'package:biomark/components/logout_component.dart'; // Import the LogoutComponent
 import '../SubscribeForm/subscribe_form.dart';
 import '../../service/UserService.dart';
 
@@ -52,12 +53,7 @@ class _MenuScreenState extends State<MenuScreen> {
       appBar: AppBar(
         title: const Text('Biomark Profile'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              // Handle logout functionality
-            },
-          ),
+          LogoutComponent(), // Use the LogoutComponent here
         ],
       ),
       body: Padding(
@@ -82,7 +78,7 @@ class _MenuScreenState extends State<MenuScreen> {
             const SizedBox(height: 20),
 
             // Personal Info Section
-            if(isSubscribed)...[
+            if (isSubscribed != null && isSubscribed!) ...[
               const Text(
                 'Personal Information',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -130,7 +126,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 
                 child: Column(
                   children: [
-                    if(isSubscribed)...[
+                  if (isSubscribed != null && isSubscribed!) ...[
                         ElevatedButton(
                           onPressed: () {
                             Navigator.push(
@@ -156,7 +152,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           child: Text("Change Password".toUpperCase()),
                         ),
                     ],
-                    if(!isSubscribed)
+                  if (isSubscribed == null || !isSubscribed!) ...[
                       ElevatedButton(
                             onPressed: () {
                               Navigator.push(
@@ -170,6 +166,7 @@ class _MenuScreenState extends State<MenuScreen> {
                           ),
                           const SizedBox(height: 10),
                   ],
+                ],
                 ),
               ),
           ],
