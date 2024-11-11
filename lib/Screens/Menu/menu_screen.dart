@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../EditProfile/edit_profile.dart';
+import '../SubscribeForm/subscribe_form.dart';
 import '../AccountRecovery/account_recovery.dart';
 
 
@@ -88,7 +88,7 @@ class MenuScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const EditProfileScreen(),
+                  builder: (context) => EditProfileScreen(),
                 ),
               );
             },
