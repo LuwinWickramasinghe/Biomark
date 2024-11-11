@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../SubscribeForm/subscribe_form.dart';
 import '../AccountRecovery/account_recovery.dart';
-
 
 
 class MenuScreen extends StatelessWidget {
@@ -84,7 +82,6 @@ class MenuScreen extends StatelessWidget {
                 children: [
                   ElevatedButton(
             onPressed: () {
-              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
               Navigator.push(
                 context,
                 MaterialPageRoute(

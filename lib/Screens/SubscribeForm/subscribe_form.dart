@@ -1,3 +1,5 @@
+import 'package:biomark/Screens/SubscriptionConfirm/subscribe_successful.dart';
+import 'package:biomark/Screens/SubscriptionConfirm/subscribe_unsuccessful.dart';
 import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 import '../../service/UserService.dart';
@@ -19,42 +21,67 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _heightController = TextEditingController();
 
   late final UserService _userService;
+  bool isSubscribed = false;
 
   @override
   void initState() {
-    print('came here1');
     super.initState();
-    print('came here2');
     _userService = UserService();
-    print('came here');
     _fetchAndAutofillEmail();
   }
 
   Future<void> _fetchAndAutofillEmail() async {
-    print("cam here");
     String? email = await _userService.getCurrentUserEmail();
-    print('email to edit');
-    print(email);
-    
     _emailController.text = email;
-    
   }
 
-  void _saveForm() async {
-    // Collect form data
-    Map<String, dynamic> formData = {
-      'email': _emailController.text,
-      'fullName': _nameController.text,
-      'dob': _dobController.text,
-      'location': _locationController.text,
-      'bloodGroup': _bloodGroupController.text,
-      'height': _heightController.text,
-    };
+  Future<void> _saveForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Collect form data
+      Map<String, dynamic> formData = {
+        'email': _emailController.text,
+        'fullName': _nameController.text,
+        'dob': _dobController.text,
+        'location': _locationController.text,
+        'bloodGroup': _bloodGroupController.text,
+        'height': _heightController.text,
+        'isSubscribed': true,
+      };
 
-    await _userService.saveFormData(formData);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Profile updated successfully!")),
-    );
+      try {
+        // Attempt to save form data
+        await _userService.saveFormData(formData);
+        setState(() {
+          isSubscribed = true;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Profile updated successfully!")),
+        );
+      } catch (e) {
+        // Handle failure, set isSubscribed to false
+        setState(() {
+          isSubscribed = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Failed to update profile.")),
+        );
+      }
+    }
+
+    if (isSubscribed) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const SubscribeSuccessfulScreen()),
+        );
+      } else {
+        // Failed submission
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const SubscribeUnsuccessfulScreen()),
+        );
+      }
   }
 
   @override
