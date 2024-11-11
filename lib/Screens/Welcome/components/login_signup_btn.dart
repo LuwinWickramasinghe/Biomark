@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../EditProfile/edit_email.dart';
+import '../../EditProfile/edit_password.dart';
+import '../../EditProfile/edit_profile.dart';
 import '../../Login/login_screen.dart';
 import '../../RecoveryConfirmation/recovery_confirmation_screen.dart';
 import '../../RecoveryConfirmation/recovery_successful.dart';
@@ -84,7 +87,7 @@ class LoginAndSignupBtn extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return const RecoveryUnsuccessfulScreen();
+                  return const EditProfileScreen();
                 },
               ),
             );
