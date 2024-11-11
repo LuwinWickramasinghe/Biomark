@@ -17,12 +17,13 @@ class AccountRecoveryViewModel extends ChangeNotifier {
 
   bool isFormValid = false;
   bool isVerified = false;
-  
+  String? userEmail; // Add email for password reset
+  String? verificationError;
+
   // Error messages for each field
   String? nameError;
   String? dobError;
   List<String?> questionErrors = [null, null];
-  String? verificationError;
 
   void replaceQuestion(int questionIndex) {
     List<SecurityQuestion> remainingQuestions = _allQuestions
@@ -73,6 +74,11 @@ class AccountRecoveryViewModel extends ChangeNotifier {
     final user = AccountRecoveryModel(recoveryData: recoveryData);
 
     isVerified = await _repository.verifyUser(user);
+    if (isVerified) {
+      // Mock sending an email (replace with real implementation)
+      userEmail = await _repository.getUserEmailFromFirebase(user); // Mock email
+    }
+
     verificationError = isVerified ? null : 'Verification failed. Please check your answers.';
     notifyListeners();
   }

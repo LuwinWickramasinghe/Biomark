@@ -56,6 +56,72 @@ print('here');
     return false;
   }
 }
+Future<String?> getUserEmailFromFirebase(AccountRecoveryModel user) async {
+  try {
+    // Encrypt the name and dob as they are stored in Firestore
+    String encryptedName = encryptData(user.recoveryData['name'] ?? '');
+    String encryptedDob = encryptData(user.recoveryData['date_of_birth'] ?? ''); // Use your encryption function
+
+    // Hash the security question answers
+    String hashedAnswer1 = hashPassword(user.recoveryData[user.recoveryData.keys.elementAt(2)] ?? ''); // Replace index as needed
+    String hashedAnswer2 = hashPassword(user.recoveryData[user.recoveryData.keys.elementAt(3)] ?? '');
+
+    // Query Firestore with the encrypted name, encrypted dob, and hashed answers
+    final querySnapshot = await _firestore
+        .collection('users')
+        .where('name', isEqualTo: encryptedName)
+        //.where('dob', isEqualTo: encryptedDob)
+        //.where(toCamelCase(user.recoveryData.keys.elementAt(2)), isEqualTo: hashedAnswer1)
+        .where(toCamelCase(user.recoveryData.keys.elementAt(3)), isEqualTo: hashedAnswer2)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // A document matching all fields was found
+      // Return the email of the first matching document
+      return querySnapshot.docs.first['email'];
+    } else {
+      // No document matches all provided data
+      return null;
+    }
+  } catch (e) {
+    // Catch any errors during Firestore verification
+    print("Error during Firestore verification: $e");
+    return null;
+  }
+}
+
+
+Future<String> updatePassword(String email, String newPassword) async {
+  try {
+    // Query Firestore to find the document that contains the email field
+    var userQuery = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .limit(1) // Limit to 1 result, assuming emails are unique
+        .get();
+
+    if (userQuery.docs.isEmpty) {
+      // If no document is found, return an error message
+      return 'User not found';
+    }
+
+    // Retrieve the document ID from the query result
+    String documentId = userQuery.docs.first.id;
+
+    // Now update the password field of the found document
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(documentId) // Use the document ID
+        .update({
+          'password': newPassword, // Update the password field
+        });
+
+    return 'Password updated successfully';
+  } catch (e) {
+    return 'Error updating password: $e';
+  }
+}
+
 
 }
 

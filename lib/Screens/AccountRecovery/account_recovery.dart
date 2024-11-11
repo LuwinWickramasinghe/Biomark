@@ -48,16 +48,15 @@ class AccountRecoveryScreen extends StatelessWidget {
                 ),
                 readOnly: true,
                 onTap: () async {
-                  final DateTime? selectedDate = await showDatePicker(
+                  final DateTime selectedDate = await showDatePicker(
                     context: context,
                     initialDate: DateTime.now(),
                     firstDate: DateTime(1900),
                     lastDate: DateTime.now(),
-                  );
-                  if (selectedDate != null) {
-                    viewModel.dobController.text = "${selectedDate.toLocal()}".split(' ')[0];
-                    viewModel.updateFormValidity();
-                  }
+                  ) ?? DateTime.now();
+                  viewModel.dobController.text =
+                      "${selectedDate.toLocal()}".split(' ')[0];
+                  viewModel.updateFormValidity();
                 },
               ),
               const SizedBox(height: 20),
@@ -111,10 +110,13 @@ class AccountRecoveryScreen extends StatelessWidget {
                       ? () async {
                           await viewModel.verifyAndProceed();
                           if (viewModel.isVerified) {
+                            // Pass email to PasswordResetScreen
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const PasswordResetScreen(),
+                                builder: (context) => PasswordResetScreen(
+                                  userEmail: viewModel.userEmail ?? '',
+                                ),
                               ),
                             );
                           }
