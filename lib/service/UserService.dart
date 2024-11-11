@@ -1,12 +1,14 @@
 import 'package:biomark/util/firebase_helper.dart';
 import 'package:biomark/util/database_helper.dart';
 import 'package:biomark/util/hash_password.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 
 class UserService {
   static final _dbHelper = DatabaseHelper.instance;
   static final _fbHelper = FirebaseHelper.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Method to validate the user
   Future<bool> validateUser(String email, String enteredPassword) async {
@@ -45,5 +47,19 @@ Future<String> getCurrentUserEmail() async {
   // Method to save form data to Firebase
   Future<void> saveFormData(Map<String, dynamic> formData) async {
     await _fbHelper.saveFormToFirebase(formData);
+  }
+
+  Future<Map<String, dynamic>?> getUserProfile() async {
+    try {
+      // Replace 'users' with your actual collection name in Firebase
+      DocumentSnapshot userDoc = await _firestore.collection('subscription').doc('email').get();
+
+      if (userDoc.exists) {
+        return userDoc.data() as Map<String, dynamic>;
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+    return null;
   }
 }
