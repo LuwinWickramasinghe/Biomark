@@ -3,7 +3,7 @@ import 'package:biomark/constants.dart';
 import '../RecoveryConfirmation/recovery_confirmation_screen.dart';
 
 class AccountRecoveryScreen extends StatelessWidget {
-  const AccountRecoveryScreen({Key? key}) : super(key: key);
+  const AccountRecoveryScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,17 +74,17 @@ class AccountRecoveryScreen extends StatelessWidget {
               // Recover Account Button
               Center(
                 child: ElevatedButton(
-            onPressed: () {
-              // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const PasswordResetScreen(),
+                  onPressed: () {
+                    // Navigate to SignUpQuestionScreen when "Sign Up" is pressed
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PasswordResetScreen(),
+                      ),
+                    );
+                  },
+                  child: Text("Edit Profile".toUpperCase()),
                 ),
-              );
-            },
-            child: Text("Edit Profile".toUpperCase()),
-          ),
               ),
             ],
           ),

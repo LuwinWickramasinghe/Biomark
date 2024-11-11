@@ -2,13 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Edit Profile"),
+        title: const Text(
+          "Edit Profile",
+          style: TextStyle(
+            fontFamily: 'Montserrat',
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -18,7 +25,11 @@ class EditProfileScreen extends StatelessWidget {
             children: [
               const Text(
                 "Personal Information",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Montserrat',
+                ),
               ),
               const SizedBox(height: 20),
 
@@ -27,6 +38,7 @@ class EditProfileScreen extends StatelessWidget {
                 initialValue: "[User Full Name]",
                 decoration: const InputDecoration(
                   labelText: "Full Name",
+                  labelStyle: TextStyle(fontFamily: 'Montserrat'),
                   prefixIcon: Icon(Icons.person),
                 ),
               ),
@@ -38,6 +50,7 @@ class EditProfileScreen extends StatelessWidget {
                 keyboardType: TextInputType.emailAddress,
                 decoration: const InputDecoration(
                   labelText: "Email Address",
+                  labelStyle: TextStyle(fontFamily: 'Montserrat'),
                   prefixIcon: Icon(Icons.email),
                 ),
               ),
@@ -48,6 +61,7 @@ class EditProfileScreen extends StatelessWidget {
                 initialValue: "[User Date of Birth]",
                 decoration: const InputDecoration(
                   labelText: "Date of Birth",
+                  labelStyle: TextStyle(fontFamily: 'Montserrat'),
                   prefixIcon: Icon(Icons.calendar_today),
                 ),
               ),
@@ -58,6 +72,7 @@ class EditProfileScreen extends StatelessWidget {
                 initialValue: "[User Location of Birth]",
                 decoration: const InputDecoration(
                   labelText: "Location of Birth",
+                  labelStyle: TextStyle(fontFamily: 'Montserrat'),
                   prefixIcon: Icon(Icons.location_on),
                 ),
               ),
@@ -68,6 +83,7 @@ class EditProfileScreen extends StatelessWidget {
                 initialValue: "[User Blood Group]",
                 decoration: const InputDecoration(
                   labelText: "Blood Group",
+                  labelStyle: TextStyle(fontFamily: 'Montserrat'),
                   prefixIcon: Icon(Icons.bloodtype),
                 ),
               ),
@@ -79,6 +95,7 @@ class EditProfileScreen extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   labelText: "Height",
+                  labelStyle: TextStyle(fontFamily: 'Montserrat'),
                   prefixIcon: Icon(Icons.height),
                 ),
               ),
@@ -90,7 +107,27 @@ class EditProfileScreen extends StatelessWidget {
                   onPressed: () {
                     // Handle save changes action
                   },
-                  child: const Text("Save Changes"),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    backgroundColor: Colors.blueAccent,
+                    elevation: 12,
+                    shadowColor: Colors.black.withOpacity(0.3),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 16,
+                      horizontal: 32,
+                    ),
+                  ),
+                  child: const Text(
+                    "Save Changes",
+                    style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],

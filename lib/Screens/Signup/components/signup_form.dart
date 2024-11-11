@@ -4,7 +4,6 @@ import '../../../constants.dart';
 import '../../Login/login_screen.dart';
 import 'package:biomark/Screens/SignupQuestions/signup_questions_screen.dart';
 
-
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
 
@@ -41,7 +40,8 @@ class _SignUpFormState extends State<SignUpForm> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SignUpQuestionScreen(name: name, email: email, password: password),
+          builder: (context) => SignUpQuestionScreen(
+              name: name, email: email, password: password),
         ),
       );
     }
@@ -91,7 +91,8 @@ class _SignUpFormState extends State<SignUpForm> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
                       return 'Please enter a valid email';
                     }
                     return null;
