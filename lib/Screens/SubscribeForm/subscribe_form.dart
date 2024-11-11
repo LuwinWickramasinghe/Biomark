@@ -1,5 +1,6 @@
 import 'package:biomark/Screens/SubscriptionConfirm/subscribe_successful.dart';
 import 'package:biomark/Screens/SubscriptionConfirm/subscribe_unsuccessful.dart';
+import 'package:biomark/util/hash_password.dart';
 import 'package:flutter/material.dart';
 import 'package:biomark/constants.dart';
 import '../../service/UserService.dart';
@@ -22,6 +23,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
 
   late final UserService _userService;
   bool isSubscribed = false;
+  String? hashId;
 
   @override
   void initState() {
@@ -33,12 +35,21 @@ class _SubscribeFormState extends State<SubscribeForm> {
   Future<void> _fetchAndAutofillEmail() async {
     String? email = await _userService.getCurrentUserEmail();
     _emailController.text = email;
+    String? name = await _userService.getCurrentUserName();
+    _nameController.text = name;
+
+
+    String preHashId = name + email;
+    hashId = hashPassword(preHashId);
+    
+
   }
 
   Future<void> _saveForm() async {
     if (_formKey.currentState!.validate()) {
       // Collect form data
       Map<String, dynamic> formData = {
+        'hashId': hashId,
         'email': _emailController.text,
         'fullName': _nameController.text,
         'dob': _dobController.text,

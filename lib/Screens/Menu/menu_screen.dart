@@ -2,7 +2,6 @@ import 'package:biomark/Screens/EditProfile/edit_email.dart';
 import 'package:biomark/Screens/EditProfile/edit_password.dart';
 import 'package:flutter/material.dart';
 import '../SubscribeForm/subscribe_form.dart';
-import '../AccountRecovery/account_recovery.dart';
 import '../../service/UserService.dart';
 
 class MenuScreen extends StatefulWidget {
@@ -15,6 +14,8 @@ class MenuScreen extends StatefulWidget {
 class _MenuScreenState extends State<MenuScreen> {
   final UserService _userService = UserService();
   bool isSubscribed = false;
+  
+
 
   @override
   void initState() {
@@ -23,15 +24,24 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Future<void> _fetchSubscriptionStatus() async {
-    final userProfile = await _userService.getUserProfile();
+    print('ttttttttttttttttttttttttttttttttttttt');
+    String? email = await _userService.getCurrentUserEmail();
+
+    print(email);
+    
+    final userProfile = await _userService.getUserProfile(email);
+
+    print(userProfile);
     if (userProfile != null && userProfile.containsKey('isSubscribed')) {
       setState(() {
-        //isSubscribed = userProfile['isSubscribed'] as bool;
-        isSubscribed = true;
+        isSubscribed = userProfile['isSubscribed'] as bool;
+        print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+        print(isSubscribed);
+      
       });
     } else {
       setState(() {
-        isSubscribed = true; // Default if not found
+        isSubscribed = false; // Default if not found
       });
     }
   }
