@@ -9,16 +9,18 @@ class SignUpScreenTopImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final double screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       children: [
         Text(
           "Sign Up".toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: kPrimaryColor, // Updated text color to match primary color
-            fontSize: 24, // Adjusted font size for better alignment
+            color: kPrimaryColor, // Updated text color to match primary color // Adjusted font size for better alignment
             letterSpacing:
-                2.0, // Slight letter spacing for better visual effect
+                2.0,
+            fontSize: screenWidth * 0.08,     // Slight letter spacing for better visual effect
           ),
         ),
         const SizedBox(height: defaultPadding),

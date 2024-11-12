@@ -52,28 +52,33 @@ class _LoginFormState extends State<LoginForm> {
     return Form(
       key: _formKey,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch, // Full-width elements
         children: [
-          TextFormField(
-            controller: _emailController,
-            keyboardType: TextInputType.emailAddress,
-            textInputAction: TextInputAction.next,
-            cursorColor: kPrimaryColor,
-            decoration: const InputDecoration(
-              hintText: "Your email",
-              prefixIcon: Padding(
-                padding: EdgeInsets.all(defaultPadding),
-                child: Icon(Icons.person),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Reduced padding for mobile
+            child: TextFormField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              textInputAction: TextInputAction.next,
+              cursorColor: kPrimaryColor,
+              decoration: const InputDecoration(
+                hintText: "Your email",
+                prefixIcon: Padding(
+                  padding: EdgeInsets.all(defaultPadding),
+                  child: Icon(Icons.person),
+                ),
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                return null;
+              },
             ),
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please enter your email';
-              }
-              return null;
-            },
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+            padding: const EdgeInsets.symmetric(vertical: defaultPadding, horizontal: 16.0),
             child: TextFormField(
               controller: _passwordController,
               textInputAction: TextInputAction.done,
@@ -95,39 +100,55 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           const SizedBox(height: defaultPadding),
-          _isLoading
-              ? const CircularProgressIndicator()
-              : ElevatedButton(
-                  onPressed: _submitLogin,
-                  child: Text(
-                    "Login".toUpperCase(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator()) // Centered for mobile
+                : ElevatedButton(
+                    onPressed: _submitLogin,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14.0), // Adjust button height
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: Text(
+                      "Login".toUpperCase(),
+                      style: const TextStyle(fontSize: 16),
+                    ),
                   ),
-                ),
-          const SizedBox(height: defaultPadding),
-          AlreadyHaveAnAccountCheck(
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const SignUpScreen(),
-                ),
-              );
-            },
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const AccountRecoveryScreen(),
+          const SizedBox(height: defaultPadding),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: AlreadyHaveAnAccountCheck(
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignUpScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AccountRecoveryScreen(),
+                  ),
+                );
+              },
+              child: const Text(
+                "Recover Account",
+                style: TextStyle(
+                  color: kPrimaryColor,
+                  decoration: TextDecoration.underline,
                 ),
-              );
-            },
-            child: const Text(
-              "Recover Account",
-              style: TextStyle(
-                color: kPrimaryColor,
-                decoration: TextDecoration.underline,
               ),
             ),
           ),

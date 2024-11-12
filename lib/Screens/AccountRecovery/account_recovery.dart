@@ -9,11 +9,19 @@ class AccountRecoveryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<AccountRecoveryViewModel>(context);
+    final themeColor = const Color(0xFF2AA2F2); // Main theme color
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Account Recovery"),
+        backgroundColor: themeColor,
+        elevation: 0,
+        title: const Text(
+          "Account Recovery",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+        ),
+        centerTitle: true,
       ),
+      backgroundColor: const Color(0xFFF3F4F6), // Soft background color
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -22,20 +30,19 @@ class AccountRecoveryScreen extends StatelessWidget {
             children: [
               const Text(
                 "Recover Your Account",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
 
-              // Single Card for all fields with custom color
+              // Card for fields with a modern design
               Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(15),
                 ),
-                elevation: 4,
-                color: const Color.fromARGB(
-                    255, 42, 162, 242), // Change card color here
+                elevation: 6,
+                color: Colors.white,
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -45,16 +52,21 @@ class AccountRecoveryScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: "Full Name",
                           labelStyle: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black, // Dark and bold label
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                          prefixIcon: const Icon(Icons.person),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: const Icon(Icons.person, color: Colors.grey),
                           errorText: viewModel.nameError,
                         ),
                         onChanged: (_) => viewModel.updateFormValidity(),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Date of Birth Field with Date Picker
                       TextFormField(
@@ -62,11 +74,16 @@ class AccountRecoveryScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: "Date of Birth",
                           labelStyle: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black, // Dark and bold label
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                          prefixIcon: const Icon(Icons.calendar_today),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: const Icon(Icons.calendar_today, color: Colors.grey),
                           errorText: viewModel.dobError,
                         ),
                         readOnly: true,
@@ -83,7 +100,7 @@ class AccountRecoveryScreen extends StatelessWidget {
                           viewModel.updateFormValidity();
                         },
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // First Security Question
                       TextFormField(
@@ -91,20 +108,25 @@ class AccountRecoveryScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: viewModel.getQuestionLabel(0),
                           labelStyle: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black, // Dark and bold label
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                          prefixIcon: Icon(viewModel.getQuestionIcon(0)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: Icon(viewModel.getQuestionIcon(0), color: Colors.grey),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.refresh),
+                            icon: const Icon(Icons.refresh, color: Colors.grey),
                             onPressed: () => viewModel.replaceQuestion(0),
                           ),
                           errorText: viewModel.questionErrors[0],
                         ),
                         onChanged: (_) => viewModel.updateFormValidity(),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Second Security Question
                       TextFormField(
@@ -112,20 +134,25 @@ class AccountRecoveryScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           labelText: viewModel.getQuestionLabel(1),
                           labelStyle: const TextStyle(
-                            fontFamily: 'Montserrat',
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black, // Dark and bold label
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                          prefixIcon: Icon(viewModel.getQuestionIcon(1)),
+                          filled: true,
+                          fillColor: Colors.grey[100],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide.none,
+                          ),
+                          prefixIcon: Icon(viewModel.getQuestionIcon(1), color: Colors.grey),
                           suffixIcon: IconButton(
-                            icon: const Icon(Icons.refresh),
+                            icon: const Icon(Icons.refresh, color: Colors.grey),
                             onPressed: () => viewModel.replaceQuestion(1),
                           ),
                           errorText: viewModel.questionErrors[1],
                         ),
                         onChanged: (_) => viewModel.updateFormValidity(),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
 
                       // Display error message for the overall verification status
                       if (viewModel.verificationError != null)
@@ -135,32 +162,47 @@ class AccountRecoveryScreen extends StatelessWidget {
                             style: const TextStyle(color: Colors.red),
                           ),
                         ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
               ),
 
               // Next Button
+              const SizedBox(height: 20),
               Center(
-                child: ElevatedButton(
-                  onPressed: viewModel.isFormValid
-                      ? () async {
-                          await viewModel.verifyAndProceed();
-                          if (viewModel.isVerified) {
-                            // Pass email to PasswordResetScreen
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PasswordResetScreen(
-                                  userEmail: viewModel.userEmail ?? '',
+                child: SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      backgroundColor: themeColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 4,
+                    ),
+                    onPressed: viewModel.isFormValid
+                        ? () async {
+                            await viewModel.verifyAndProceed();
+                            if (viewModel.isVerified) {
+                              // Pass email to PasswordResetScreen
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PasswordResetScreen(
+                                    userEmail: viewModel.userEmail ?? '',
+                                  ),
                                 ),
-                              ),
-                            );
+                              );
+                            }
                           }
-                        }
-                      : null,
-                  child: const Text("NEXT"),
+                        : null,
+                    child: const Text(
+                      "NEXT",
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                  ),
                 ),
               ),
             ],

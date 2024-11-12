@@ -31,23 +31,21 @@ class MobileLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment:
-          CrossAxisAlignment.center, // Centered items horizontally
+      crossAxisAlignment: CrossAxisAlignment.center, // Centered items horizontally
       children: <Widget>[
         const LoginScreenTopImage(),
         const SizedBox(height: 20),
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.symmetric(horizontal: 16), // Reduced margin for mobile
+          padding: const EdgeInsets.all(16), // Reduced padding
           decoration: BoxDecoration(
-            color:
-                kPrimaryLightColor, // Set light background color for the form
+            color: kPrimaryLightColor,
             borderRadius: BorderRadius.circular(12),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.1),
                 spreadRadius: 2,
-                blurRadius: 10,
+                blurRadius: 8, // Slightly less blur
               ),
             ],
           ),
@@ -73,14 +71,13 @@ class DesktopLoginScreen extends StatelessWidget {
         ),
         Expanded(
           child: Align(
-            alignment: Alignment.center, // Center the form on desktop
+            alignment: Alignment.center,
             child: SizedBox(
-              width: 450, // Fix the form width
+              width: 450, // Fixed width for desktop form
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color:
-                      kPrimaryLightColor, // Set light background color for the form
+                  color: kPrimaryLightColor,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
