@@ -40,12 +40,8 @@ class _SubscribeFormState extends State<SubscribeForm> {
     String? name = await _userService.getCurrentUserName();
     _nameController.text = name;
 
-
-
     String preHashId = name + email;
     hashId = hashPassword(preHashId);
-    
-
   }
 
   Future<void> _saveForm() async {
@@ -66,7 +62,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
 
       try {
         // Attempt to save form data
-         await _userService.saveFormData(formData);
+        await _userService.saveFormData(formData);
         setState(() {
           isSubscribed = true;
         });
@@ -87,17 +83,20 @@ class _SubscribeFormState extends State<SubscribeForm> {
     }
 
     if (isSubscribed) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SubscribeSuccessfulScreen()),
-        );
-      } else {
-        // Failed submission
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const SubscribeUnsuccessfulScreen()),
-        );
-      }
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SubscribeSuccessfulScreen(),
+        ),
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SubscribeUnsuccessfulScreen(),
+        ),
+      );
+    }
   }
 
   @override
@@ -121,6 +120,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _nameController,
+                  readOnly: true, // Make field uneditable
                   decoration: const InputDecoration(
                     labelText: "Full Name",
                     prefixIcon: Icon(Icons.person),
@@ -129,6 +129,7 @@ class _SubscribeFormState extends State<SubscribeForm> {
                 const SizedBox(height: defaultPadding),
                 TextFormField(
                   controller: _emailController,
+                  readOnly: true, // Make field uneditable
                   decoration: const InputDecoration(
                     labelText: "Email Address",
                     prefixIcon: Icon(Icons.email),
@@ -167,20 +168,19 @@ class _SubscribeFormState extends State<SubscribeForm> {
                   ),
                 ),
                 const SizedBox(height: defaultPadding),
-                
                 TextFormField(
                   controller: _ethnicityController,
                   decoration: const InputDecoration(
                     labelText: "Ethnicity",
-                    prefixIcon: Icon(Icons.height),
+                    prefixIcon: Icon(Icons.person),
                   ),
                 ),
                 const SizedBox(height: defaultPadding),
                 TextFormField(
                   controller: _eyeColorController,
                   decoration: const InputDecoration(
-                    labelText: "Eye Colour",
-                    prefixIcon: Icon(Icons.height),
+                    labelText: "Eye Color",
+                    prefixIcon: Icon(Icons.remove_red_eye),
                   ),
                 ),
                 const SizedBox(height: defaultPadding),
