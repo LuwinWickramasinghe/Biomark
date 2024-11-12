@@ -102,4 +102,23 @@ Future<Map<String, dynamic>?> getUserProfile(String email) async {
     return null; // Return null on error
   }
 }
+
+Future<void> unsubscribeUser() async {
+  try {
+    // Get the current user's email
+    String? email = await getCurrentUserEmail();
+    
+    if (email != null) {
+      // Call the unsubscribe method with the email
+      await _fbHelper.unsubscribe(email);
+      print("User unsubscribed successfully");
+    } else {
+      throw Exception('User email not found');
+    }
+  } catch (e) {
+    print('Error unsubscribing user: $e');
+    throw e;
+  }
+}
+
 }

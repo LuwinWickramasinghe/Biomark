@@ -76,6 +76,36 @@ Future<void> saveEmailToFirebase(Map<String, dynamic> formData) async {
   await _updateEmail('subscription');
   await _updateEmail('users');
 }
+Future<bool> unsubscribe(String email) async {
+  try {
+    // Fetch the document for the user by querying the 'email' field
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('subscription')
+        .where('email', isEqualTo: email) // Query based on the 'email' field
+        .limit(1) // Ensure only one document is returned
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      // Get the document ID of the matched user
+      final userDocId = querySnapshot.docs.first.id;
+
+      // Delete the document
+      await FirebaseFirestore.instance
+          .collection('subscription')
+          .doc(userDocId)
+          .delete();
+
+      print("User document deleted successfully");
+      return true;
+    } else {
+      print("User not found");
+      return false; // User not found
+    }
+  } catch (e) {
+    print("Error deleting user document in Firebase: $e");
+    return false; // Return false on error
+  }
+}
 
 
   
