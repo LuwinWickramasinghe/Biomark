@@ -1,86 +1,78 @@
 import 'package:flutter/material.dart';
 
-import '../../EditProfile/edit_email.dart';
-import '../../EditProfile/edit_password.dart';
-import '../../EditProfile/edit_profile.dart';
 import '../../Login/login_screen.dart';
-import '../../RecoveryConfirmation/recovery_confirmation_screen.dart';
-import '../../RecoveryConfirmation/recovery_successful.dart';
-import '../../RecoveryConfirmation/recovery_unsuccessful.dart';
 import '../../Signup/signup_screen.dart';
-import '../../Menu/menu_screen.dart';
 
 class LoginAndSignupBtn extends StatelessWidget {
-  const LoginAndSignupBtn({
-    super.key,
-  });
+  const LoginAndSignupBtn({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const LoginScreen();
-                },
+        SizedBox(
+          width: double.infinity, // Makes button full width
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              backgroundColor: Colors.blueAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              shadowColor: Colors.black.withOpacity(0.1),
+              elevation: 2,
             ),
-            backgroundColor: Colors.blueAccent,
-            elevation: 12,
-            shadowColor: Colors.black.withOpacity(0.3),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-          ),
-          child: Text(
-            "Login".toUpperCase(),
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              fontFamily: 'Montserrat',
-              color: Colors.white,
+            child: Text(
+              "LOGIN",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: 'Montserrat',
+                color: Colors.white,
+              ),
             ),
           ),
         ),
         const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const SignUpScreen();
-                },
+        SizedBox(
+          width: double.infinity, // Makes button full width
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SignUpScreen(),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              backgroundColor: Colors.blue.shade100,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30),
+              shadowColor: Colors.black.withOpacity(0.1),
+              elevation: 2,
             ),
-            backgroundColor: Colors.blue[100],
-            elevation: 12,
-            shadowColor: Colors.black.withOpacity(0.3),
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32),
-          ),
-          child: Text(
-            "Sign Up".toUpperCase(),
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Colors.black,
-              fontFamily: 'Montserrat',
+            child: Text(
+              "SIGN UP",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: 'Montserrat',
+                color: Colors.black,
+              ),
             ),
           ),
         ),
-        const SizedBox(height: 16),
       ],
     );
   }
