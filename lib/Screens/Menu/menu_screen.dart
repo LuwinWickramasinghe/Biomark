@@ -115,7 +115,7 @@ class _MenuScreenState extends State<MenuScreen> {
                     // Profile Header
                     Center(
                       child: Text(
-                        'Welcome, ${name ?? ''}!', // This will display the user's name regardless of subscription status
+                        'Welcome, ${name ?? 'Guest'}!', // This will display the user's name or 'Guest' if null
                         style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
