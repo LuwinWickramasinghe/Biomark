@@ -31,7 +31,7 @@ class _MenuScreenState extends State<MenuScreen> {
   void initState() {
     super.initState();
     _fetchSubscriptionStatus();
-    _fetchUserName();
+   // _fetchUserName();
   }
 
   // Fetch user name asynchronously
@@ -44,7 +44,10 @@ class _MenuScreenState extends State<MenuScreen> {
 
   Future<void> _fetchSubscriptionStatus() async {
     if (isDataLoaded) return;
-
+     String? userName = await _userService.getCurrentUserName();
+     setState(() {
+      name = userName;
+    });
     String? email = await _userService.getCurrentUserEmail();
     final userProfile = await _userService.getUserProfile(email);
 
