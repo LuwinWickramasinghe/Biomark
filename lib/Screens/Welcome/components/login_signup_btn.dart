@@ -1,52 +1,76 @@
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
 import '../../Login/login_screen.dart';
 import '../../Signup/signup_screen.dart';
 
 class LoginAndSignupBtn extends StatelessWidget {
-  const LoginAndSignupBtn({
-    Key? key,
-  }) : super(key: key);
+  const LoginAndSignupBtn({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const LoginScreen();
-                },
+        SizedBox(
+          width: double.infinity, // Makes button full width
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const LoginScreen(),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              backgroundColor: Colors.blueAccent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            );
-          },
-          child: Text(
-            "Login".toUpperCase(),
+              shadowColor: Colors.black.withOpacity(0.1),
+              elevation: 2,
+            ),
+            child: Text(
+              "LOGIN",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: 'Montserrat',
+                color: Colors.white,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return const SignUpScreen();
-                },
+        SizedBox(
+          width: double.infinity, // Makes button full width
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SignUpScreen(),
+                ),
+              );
+            },
+            style: TextButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              backgroundColor: Colors.blue.shade100,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
-            );
-          },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: kPrimaryLightColor,
-            elevation: 0,
-          ),
-          child: Text(
-            "Sign Up".toUpperCase(),
-            style: const TextStyle(color: Colors.black),
+              shadowColor: Colors.black.withOpacity(0.1),
+              elevation: 2,
+            ),
+            child: Text(
+              "SIGN UP",
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+                fontFamily: 'Montserrat',
+                color: Colors.black,
+              ),
+            ),
           ),
         ),
       ],

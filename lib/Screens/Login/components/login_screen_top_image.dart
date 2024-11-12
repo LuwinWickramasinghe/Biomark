@@ -1,33 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import '../../../constants.dart';
 
 class LoginScreenTopImage extends StatelessWidget {
   const LoginScreenTopImage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       children: [
-        const Text(
+        Text(
           "LOGIN",
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: screenWidth * 0.08,
+            color: kPrimaryColor, // Scale text size for mobile
+          ),
         ),
-        const SizedBox(height: defaultPadding * 2),
+        SizedBox(height: defaultPadding * 1.5), // Adjust spacing for mobile
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Spacer(),
             Expanded(
               flex: 8,
-              child: SvgPicture.asset("assets/icons/login.svg"),
+              child: SvgPicture.asset(
+                "assets/icons/login.svg",
+                width: screenWidth * 0.6, // Adjust image width for mobile
+              ),
             ),
-            const Spacer(),
           ],
         ),
-        const SizedBox(height: defaultPadding * 2),
+        SizedBox(height: defaultPadding * 1.5), // Adjust bottom spacing
       ],
     );
   }

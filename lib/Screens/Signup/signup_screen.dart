@@ -6,7 +6,7 @@ import 'components/sign_up_top_image.dart';
 import 'components/signup_form.dart';
 
 class SignUpScreen extends StatelessWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,26 +14,7 @@ class SignUpScreen extends StatelessWidget {
       child: SingleChildScrollView(
         child: Responsive(
           mobile: MobileSignupScreen(),
-          desktop: Row(
-            children: [
-              Expanded(
-                child: SignUpScreenTopImage(),
-              ),
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 450,
-                      child: SignUpForm(),
-                    ),
-                    SizedBox(height: defaultPadding / 2),
-                    // SocalSignUp()
-                  ],
-                ),
-              )
-            ],
-          ),
+          desktop: DesktopSignupScreen(),
         ),
       ),
     );
@@ -42,26 +23,77 @@ class SignUpScreen extends StatelessWidget {
 
 class MobileSignupScreen extends StatelessWidget {
   const MobileSignupScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment:
+          CrossAxisAlignment.center, // Center the children horizontally
       children: <Widget>[
-        SignUpScreenTopImage(),
-        Row(
-          children: [
-            Spacer(),
-            Expanded(
-              flex: 8,
-              child: SignUpForm(),
-            ),
-            Spacer(),
-          ],
+        const SignUpScreenTopImage(),
+        const SizedBox(height: 20),
+        Container(
+          margin:
+              const EdgeInsets.symmetric(horizontal: 20), // Padding from edges
+          padding: const EdgeInsets.all(20),
+          decoration: BoxDecoration(
+            color: kPrimaryLightColor, // Background color for form
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                spreadRadius: 2,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: const SignUpForm(),
         ),
-        // const SocalSignUp()
+      ],
+    );
+  }
+}
+
+class DesktopSignupScreen extends StatelessWidget {
+  const DesktopSignupScreen({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center, // Center the row content
+      children: [
+        const Expanded(
+          child: SignUpScreenTopImage(),
+        ),
+        Expanded(
+          child: Align(
+            alignment: Alignment.center, // Center the form on desktop
+            child: SizedBox(
+              width: 450, // Fix the width of the form
+              child: Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color:
+                      kPrimaryLightColor, // Light background color for the form
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: const SignUpForm(),
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
